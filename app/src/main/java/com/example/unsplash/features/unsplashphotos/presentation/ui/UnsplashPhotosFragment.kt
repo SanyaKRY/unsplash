@@ -1,0 +1,69 @@
+package com.example.unsplash.features.unsplashphotos.presentation.ui
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.unsplash.databinding.FragmentUnsplashPhotosBinding
+import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
+import com.example.unsplash.features.unsplashphotos.presentation.ui.recyclerview.UnsplashPhotosAdapter
+import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+class UnsplashPhotosFragment : Fragment() {
+
+    private var _binding: FragmentUnsplashPhotosBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: UnsplashPhotoViewModel by viewModel()
+
+    private var recyclerView: RecyclerView? = null
+    private val unsplashPhotosAdapter: UnsplashPhotosAdapter by inject()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentUnsplashPhotosBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        bindViews()
+        observerLiveData()
+
+        return view
+    }
+
+    private fun bindViews() {
+        recyclerView = binding.recyclerView
+    }
+
+    private fun observerLiveData() {
+        viewModel.unsplashPhotosLiveData.observe(viewLifecycleOwner, Observer(::onUnsplashPhotosReceived))
+    }
+
+    private fun onUnsplashPhotosReceived(listOfUnsplashPhotos: List<UnsplashPhotoUi>) {
+        showUnsplashPhotos(listOfUnsplashPhotos)
+    }
+
+    private fun showUnsplashPhotos(listOfUnsplashPhotos: List<UnsplashPhotoUi>) {
+        populateRecyclerView(listOfUnsplashPhotos)
+    }
+
+    private fun populateRecyclerView(listOfUnsplashPhotos: List<UnsplashPhotoUi>) {
+        recyclerView?.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = unsplashPhotosAdapter.apply { updateAdapter(listOfUnsplashPhotos) }
+            setHasFixedSize(true)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}

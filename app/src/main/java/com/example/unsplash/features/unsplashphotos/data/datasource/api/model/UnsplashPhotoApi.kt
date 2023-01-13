@@ -1,10 +1,10 @@
-package com.example.unsplash.model
+package com.example.unsplash.features.unsplashphotos.data.datasource.api.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class UnsplashPhoto(
+data class UnsplashPhotoApi(
     @Json(name = "id") val id: String,
     @Json(name = "urls") val urls: Urls,
     @Json(name = "likes") val likes: Int,
