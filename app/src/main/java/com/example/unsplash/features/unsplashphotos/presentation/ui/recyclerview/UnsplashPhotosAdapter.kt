@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.unsplash.databinding.UnsplashPhotoItemBinding
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
 
-class UnsplashPhotosAdapter : RecyclerView.Adapter<ViewHolder>() {
+class UnsplashPhotosAdapter(
+    private val unsplashPhotoDetailListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit
+) : RecyclerView.Adapter<ViewHolder>() {
 
     private val listOfUnsplashPhotos = mutableListOf<UnsplashPhotoUi>()
 
@@ -18,9 +20,14 @@ class UnsplashPhotosAdapter : RecyclerView.Adapter<ViewHolder>() {
         val itemViewHolder = UnsplashPhotoItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false)
 
+        val viewHolder = ViewHolder(itemViewHolder)
+
+
+        setUnsplashPhotoItemListener(viewHolder)
         avoidMultipleClicks(itemViewHolder.root)
 
-        return ViewHolder(itemViewHolder)
+
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -39,6 +46,15 @@ class UnsplashPhotosAdapter : RecyclerView.Adapter<ViewHolder>() {
         handler.postDelayed({
             view.isClickable = true
         }, 1000)
+    }
+
+    private fun setUnsplashPhotoItemListener(viewHolder: ViewHolder) {
+        viewHolder.itemView.setOnClickListener {
+            val position = viewHolder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                unsplashPhotoDetailListener.invoke(listOfUnsplashPhotos[position])
+            }
+        }
     }
 
     fun setData(unsplashPhotos: List<UnsplashPhotoUi>) {

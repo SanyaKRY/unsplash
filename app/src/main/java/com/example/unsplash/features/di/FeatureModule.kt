@@ -1,6 +1,7 @@
 package com.example.unsplash.features.di
 
 import com.example.unsplash.features.unsplashphotos.domain.usecase.GetListOfUnsplashPhotosUseCase
+import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
 import com.example.unsplash.features.unsplashphotos.presentation.ui.recyclerview.UnsplashPhotosAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -13,5 +14,6 @@ val featureModule = module {
             getListOfUnsplashPhotosUseCase = get()
         )
     }
-    factory { UnsplashPhotosAdapter() }
+    factory { (unsplashPhotoDetailListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit) ->
+        UnsplashPhotosAdapter(unsplashPhotoDetailListener = unsplashPhotoDetailListener) }
 }

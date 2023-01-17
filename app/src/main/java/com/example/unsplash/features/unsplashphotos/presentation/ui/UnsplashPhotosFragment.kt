@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unsplash.databinding.FragmentUnsplashPhotosBinding
@@ -14,6 +15,7 @@ import com.example.unsplash.features.unsplashphotos.presentation.ui.recyclerview
 import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class UnsplashPhotosFragment : Fragment() {
 
@@ -23,7 +25,15 @@ class UnsplashPhotosFragment : Fragment() {
     private val viewModel: UnsplashPhotoViewModel by viewModel()
 
     private var recyclerView: RecyclerView? = null
-    private val unsplashPhotosAdapter: UnsplashPhotosAdapter by inject()
+
+    private val unsplashPhotoDetailListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit = {
+            unsplashPhotoUi ->
+                val action = UnsplashPhotosFragmentDirections
+                    .actionUnsplashPhotosFragmentToUnsplashPhotoDetailFragment(unsplashPhotoUi)
+                findNavController().navigate(action)
+    }
+
+    private val unsplashPhotosAdapter: UnsplashPhotosAdapter by inject{parametersOf(unsplashPhotoDetailListener)}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

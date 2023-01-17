@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/unsplashPhotosFragment">
+
+    <fragment
+        android:id="@+id/unsplashPhotosFragment"
+        android:name="com.example.unsplash.features.unsplashphotos.presentation.ui.UnsplashPhotosFragment"
+        android:label="fragment_unsplash_photos"
+        tools:layout="@layout/fragment_unsplash_photos" >
+        <action
+            android:id="@+id/action_unsplashPhotosFragment_to_unsplashPhotoDetailFragment"
+            app:destination="@id/unsplashPhotoDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/unsplashPhotoDetailFragment"
+        android:name="com.example.unsplash.features.unsplashphotodetail.presenter.ui.UnsplashPhotoDetailFragment"
+        android:label="fragment_unsplash_photo_detail"
+        tools:layout="@layout/fragment_unsplash_photo_detail" >
+        <action
+            android:id="@+id/action_unsplashPhotoDetailFragment_to_unsplashPhotosFragment"
+            app:destination="@id/unsplashPhotosFragment" />
+        <argument
+            android:name="unsplashPhoto"
+            app:argType="com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi" />
+    </fragment>
+</navigation>
