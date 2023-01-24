@@ -4,6 +4,8 @@ import android.app.Application
 import com.example.unsplash.features.unsplashphotos.data.di.retrofitModule
 import com.example.unsplash.features.unsplashphotos.data.di.unsplashPhotoApiModule
 import com.example.unsplash.features.di.featureModule
+import com.example.unsplash.features.unsplashphotodetail.data.di.databaseModule
+import com.example.unsplash.features.unsplashphotodetail.data.di.unsplashPhotoDatabaseModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -22,7 +24,9 @@ class BaseProjectApplication : Application() {
                 listOf(
                     retrofitModule,
                     unsplashPhotoApiModule,
-                    featureModule
+                    featureModule,
+                    databaseModule,
+                    unsplashPhotoDatabaseModule
                 )
             )
         }

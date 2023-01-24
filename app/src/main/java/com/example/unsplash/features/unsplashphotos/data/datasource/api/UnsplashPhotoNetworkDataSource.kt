@@ -6,7 +6,7 @@ import com.example.unsplash.core.datatype.Result
 import com.example.unsplash.features.unsplashphotos.data.datasource.api.model.UnsplashPhotoApi
 import java.lang.Exception
 
-const val MAX_RESULTS_PER_PAGE: Int = 20
+const val MAX_RESULTS_PER_PAGE: Int = 40
 
 class UnsplashPhotoNetworkDataSource(private val unsplashPhotoApiService: UnsplashPhotoApiService) {
 

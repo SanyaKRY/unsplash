@@ -1,6 +1,7 @@
 package com.example.unsplash.features.unsplashphotos.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +55,17 @@ class UnsplashPhotosFragment : Fragment() {
 
     private fun observerLiveData() {
         viewModel.unsplashPhotosLiveData.observe(viewLifecycleOwner, Observer(::onUnsplashPhotosReceived))
+        viewModel.isLoadingLiveData.observe(viewLifecycleOwner, Observer(::onLoadingStateReceived))
+    }
+
+    private fun onLoadingStateReceived(isLoading: Boolean) {
+        showSpinner(isLoading)
+    }
+
+    private fun showSpinner(isLoading: Boolean) {
+        binding.spinner.apply {
+            root.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
     }
 
     private fun onUnsplashPhotosReceived(listOfUnsplashPhotos: List<UnsplashPhotoUi>) {

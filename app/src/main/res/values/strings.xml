@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Unsplash</string>
     <string name="unsplash_photo_id">Id</string>
+    <string name="unsplash_photo_saved">Saved</string>
+    <string name="unsplash_photo_not_saved">Not saved</string>
+    <string name="unsplash_photo_is_saved">Is saved</string>
+    <string name="unsplash_photo_insert">Insert</string>
+    <string name="unsplash_photo_delete">Delete</string>
 </resources>
