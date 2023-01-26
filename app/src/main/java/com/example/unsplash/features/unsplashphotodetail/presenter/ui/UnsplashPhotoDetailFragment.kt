@@ -48,7 +48,6 @@ class UnsplashPhotoDetailFragment : Fragment() {
 
     private fun observerLiveData() {
         viewModel.isSavedUnsplashPhotoLiveData.observe(viewLifecycleOwner, Observer(::isSavedUnsplashPhoto))
-        viewModel.isLoadingLiveData.observe(viewLifecycleOwner, Observer(::onLoadingStateReceived))
     }
 
     private fun isSavedUnsplashPhoto(isSaved: Boolean) {
@@ -61,17 +60,6 @@ class UnsplashPhotoDetailFragment : Fragment() {
             binding.delete.isEnabled = true
         } else {
             binding.insert.isEnabled = true
-        }
-    }
-
-    private fun onLoadingStateReceived(isLoading: Boolean) {
-        showSpinner(isLoading)
-    }
-
-    private fun showSpinner(isLoading: Boolean) {
-        Log.d("UnsplashPhotoLog", "showSpinner UnsplashPhotoDetailFragment ${isLoading}")
-        binding.spinner.apply {
-            root.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.unsplash.features.di
 
+import androidx.appcompat.widget.AppCompatImageView
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.DeleteUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.InsertUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.IsSavedUnsplashPhotoUseCase
@@ -31,6 +32,6 @@ val featureModule = module {
             isSavedUnsplashPhotoUseCase = get()
         )
     }
-    factory { (unsplashPhotoDetailListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit) ->
+    factory { (unsplashPhotoDetailListener: (unsplashPhotoUi: UnsplashPhotoUi, AppCompatImageView) -> Unit) ->
         UnsplashPhotosAdapter(unsplashPhotoDetailListener = unsplashPhotoDetailListener) }
 }

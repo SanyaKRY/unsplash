@@ -6,6 +6,7 @@ import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPh
 class DeleteUnsplashPhotoUseCase(private val repository: UnsplashPhotoDetailRepository) {
 
     suspend fun execute(unsplashPhoto: UnsplashPhotoDetailDomain) {
+        unsplashPhoto.isSaved = false
         return repository.deleteUnsplashPhoto(unsplashPhoto)
     }
 }

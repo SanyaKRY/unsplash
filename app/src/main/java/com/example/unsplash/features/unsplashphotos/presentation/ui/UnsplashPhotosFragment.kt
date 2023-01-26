@@ -1,15 +1,17 @@
 package com.example.unsplash.features.unsplashphotos.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.unsplash.R
 import com.example.unsplash.databinding.FragmentUnsplashPhotosBinding
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
 import com.example.unsplash.features.unsplashphotos.presentation.ui.recyclerview.UnsplashPhotosAdapter
@@ -27,8 +29,10 @@ class UnsplashPhotosFragment : Fragment() {
 
     private var recyclerView: RecyclerView? = null
 
-    private val unsplashPhotoDetailListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit = {
-            unsplashPhotoUi ->
+    private val unsplashPhotoDetailListener: (
+        unsplashPhotoUi: UnsplashPhotoUi, unsplashPhotoImageView: AppCompatImageView
+    ) -> Unit = {
+            unsplashPhotoUi, imageView ->
                 val action = UnsplashPhotosFragmentDirections
                     .actionUnsplashPhotosFragmentToUnsplashPhotoDetailFragment(unsplashPhotoUi)
                 findNavController().navigate(action)

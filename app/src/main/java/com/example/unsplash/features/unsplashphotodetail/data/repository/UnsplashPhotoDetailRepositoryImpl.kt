@@ -17,9 +17,9 @@ class UnsplashPhotoDetailRepositoryImpl(private val unsplashPhotoDBDataSource: U
     }
 
     override suspend fun searchUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): UnsplashPhotoDetailDomain? {
-        var unsplashPhoto: UnsplashPhotoDatabase? = unsplashPhotoDBDataSource.searchUnsplashPhoto(unsplashPhoto)
-        return if (unsplashPhoto != null) {
-            DatabaseToDetailDomainMapper.map(unsplashPhoto)
+        var unsplashPhotoDatabase: UnsplashPhotoDatabase? = unsplashPhotoDBDataSource.searchUnsplashPhoto(unsplashPhoto)
+        return if (unsplashPhotoDatabase != null) {
+            DatabaseToDetailDomainMapper.map(unsplashPhotoDatabase)
         } else {
             null
         }
