@@ -5,13 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.unsplash.R
 import com.example.unsplash.databinding.FragmentUnsplashPhotosBinding
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
 import com.example.unsplash.features.unsplashphotos.presentation.ui.recyclerview.UnsplashPhotosAdapter
@@ -30,12 +30,16 @@ class UnsplashPhotosFragment : Fragment() {
     private var recyclerView: RecyclerView? = null
 
     private val unsplashPhotoDetailListener: (
-        unsplashPhotoUi: UnsplashPhotoUi, unsplashPhotoImageView: AppCompatImageView
+        unsplashPhotoUi: UnsplashPhotoUi, imageView: AppCompatImageView, textView: TextView
     ) -> Unit = {
-            unsplashPhotoUi, imageView ->
+            unsplashPhotoUi, imageView, textView ->
+                val extras = FragmentNavigatorExtras(
+                    imageView to unsplashPhotoUi.urlsRegular,
+                    textView to unsplashPhotoUi.id
+                )
                 val action = UnsplashPhotosFragmentDirections
                     .actionUnsplashPhotosFragmentToUnsplashPhotoDetailFragment(unsplashPhotoUi)
-                findNavController().navigate(action)
+                findNavController().navigate(action, extras)
     }
 
     private val unsplashPhotosAdapter: UnsplashPhotosAdapter by inject{parametersOf(unsplashPhotoDetailListener)}
@@ -46,7 +50,6 @@ class UnsplashPhotosFragment : Fragment() {
     ): View? {
         _binding = FragmentUnsplashPhotosBinding.inflate(inflater, container, false)
         val view = binding.root
-
         bindViews()
         observerLiveData()
 
@@ -82,6 +85,11 @@ class UnsplashPhotosFragment : Fragment() {
 
     private fun populateRecyclerView(listOfUnsplashPhotos: List<UnsplashPhotoUi>) {
         recyclerView?.apply {
+            postponeEnterTransition()
+            viewTreeObserver.addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
             layoutManager = LinearLayoutManager(context)
             adapter = unsplashPhotosAdapter.apply { updateAdapter(listOfUnsplashPhotos) }
             setHasFixedSize(true)

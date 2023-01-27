@@ -1,5 +1,6 @@
 package com.example.unsplash.features.unsplashphotos.presentation.ui.recyclerview
 
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -12,6 +13,13 @@ class ViewHolder(val binding: UnsplashPhotoItemBinding) : RecyclerView.ViewHolde
     fun bind(unsplashPhotoItem: UnsplashPhotoUi) {
         binding.unsplashPhotoId.text = unsplashPhotoItem.id
         loadImage(binding.unsplashPhotoImage, unsplashPhotoItem.urlsRegular)
+
+        setTransitionNames(binding.unsplashPhotoImage, binding.unsplashPhotoId, unsplashPhotoItem)
+    }
+
+    private fun setTransitionNames(imageView: AppCompatImageView, textView: TextView, unsplashPhotoItem: UnsplashPhotoUi) {
+        imageView.transitionName = unsplashPhotoItem.urlsRegular
+        textView.transitionName = unsplashPhotoItem.id
     }
 
     private fun loadImage(imageView: AppCompatImageView, imageUri: String) {

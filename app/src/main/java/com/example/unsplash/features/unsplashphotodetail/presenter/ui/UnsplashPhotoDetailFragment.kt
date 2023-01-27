@@ -1,15 +1,21 @@
 package com.example.unsplash.features.unsplashphotodetail.presenter.ui
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
+import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.unsplash.R
 import com.example.unsplash.databinding.FragmentUnsplashPhotoDetailBinding
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.UiToDetailUiMapper
@@ -38,12 +44,52 @@ class UnsplashPhotoDetailFragment : Fragment() {
         _binding = FragmentUnsplashPhotoDetailBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        Log.d("UnsplashPhotoLog", "onCreateView UnsplashPhotoDetailFragment ${this.toString()}")
-
         observerLiveData()
         bindViews()
+        setTransition()
 
         return view
+    }
+
+    private fun setTransition() {
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        postponeEnterTransition()
+        binding.unsplashPhotoImageView.apply {
+            transitionName = unsplashPhoto.urlsRegular
+            startEnterTransitionAfterLoadingImage(unsplashPhoto.urlsRegular, this)
+        }
+        binding.unsplashPhotoId.apply {
+            transitionName = unsplashPhoto.id
+        }
+    }
+
+    private fun startEnterTransitionAfterLoadingImage(imageAddress: String, imageView: ImageView) {
+        Glide.with(this)
+            .load(imageAddress)
+            .dontAnimate()
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    startPostponedEnterTransition()
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: Target<Drawable>,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    startPostponedEnterTransition()
+                    return false
+                }
+            })
+            .into(imageView)
     }
 
     private fun observerLiveData() {

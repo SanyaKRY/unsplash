@@ -5,6 +5,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,7 @@ import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashP
 
 class UnsplashPhotosAdapter(
     private val unsplashPhotoDetailListener: (
-        unsplashPhotoUi: UnsplashPhotoUi, unsplashPhotoImageView: AppCompatImageView
+        unsplashPhotoUi: UnsplashPhotoUi, imageView: AppCompatImageView, textView: TextView
     ) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
@@ -55,7 +56,10 @@ class UnsplashPhotosAdapter(
         viewHolder.itemView.setOnClickListener {
             val position = viewHolder.bindingAdapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                unsplashPhotoDetailListener.invoke(listOfUnsplashPhotos[position], viewHolder.binding.unsplashPhotoImage)
+                unsplashPhotoDetailListener.invoke(
+                    listOfUnsplashPhotos[position],
+                    viewHolder.binding.unsplashPhotoImage,
+                    viewHolder.binding.unsplashPhotoId)
             }
         }
     }
