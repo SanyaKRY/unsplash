@@ -1,5 +1,7 @@
 package com.example.unsplash.features.unsplashphotodetail.presenter.ui
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.transition.TransitionInflater
@@ -7,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewPropertyAnimator
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.Observer
@@ -47,12 +50,81 @@ class UnsplashPhotoDetailFragment : Fragment() {
         observerLiveData()
         bindViews()
         setTransition()
+        setInserDeleteButtonImageView()
 
         return view
     }
 
+    private fun setInserDeleteButtonImageView() {
+        binding.insertDeleteImageView.setOnClickListener {
+            unsplashPhoto.isSaved = unsplashPhoto.isSaved?.not()
+            if (unsplashPhoto.isSaved!!) {
+                viewModel.insertUnsplashPhoto(unsplashPhoto)
+            } else {
+                viewModel.deleteUnsplashPhoto(unsplashPhoto)
+            }
+            animateFavoriteIcon(unsplashPhoto.isSaved!!)
+        }
+    }
+
+    // animation
+    private fun animateFavoriteIcon(isFavoriteBeer: Boolean) {
+        val viewPropertyAnimator = binding.insertDeleteImageView.animate()
+
+        viewPropertyAnimator
+            .scaleX(0.5f)
+            .scaleY(0.5f)
+            .setDuration(250)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    populateFavoriteIconView(isFavoriteBeer)
+                    restartFavoriteIconSize(viewPropertyAnimator)
+                }
+
+                override fun onAnimationStart(animation: Animator) {
+                    super.onAnimationStart(animation)
+                    binding.insertDeleteImageView.isClickable = false
+                }
+            })
+    }
+
+    // animation
+    private fun populateFavoriteIconView(isFavorite: Boolean) {
+        getFavoriteIcon(isFavorite)?.let {
+            binding.insertDeleteImageView.setImageResource(it)
+        }
+
+    }
+
+    // animation
+    private fun getFavoriteIcon(isFavorite: Boolean): Int? {
+        return if (isFavorite) {
+            R.drawable.ic_star_full
+        } else {
+            R.drawable.ic_star_border
+        }
+    }
+
+    // animation
+    private fun restartFavoriteIconSize(viewPropertyAnimator: ViewPropertyAnimator) {
+        viewPropertyAnimator
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(250)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    viewPropertyAnimator.cancel()
+                    binding.insertDeleteImageView.isClickable = true
+                }
+            })
+    }
+
+    // transition
     private fun setTransition() {
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         postponeEnterTransition()
         binding.unsplashPhotoImageView.apply {
             transitionName = unsplashPhoto.urlsRegular
@@ -63,6 +135,7 @@ class UnsplashPhotoDetailFragment : Fragment() {
         }
     }
 
+    // transition
     private fun startEnterTransitionAfterLoadingImage(imageAddress: String, imageView: ImageView) {
         Glide.with(this)
             .load(imageAddress)
@@ -93,32 +166,16 @@ class UnsplashPhotoDetailFragment : Fragment() {
     }
 
     private fun observerLiveData() {
-        viewModel.isSavedUnsplashPhotoLiveData.observe(viewLifecycleOwner, Observer(::isSavedUnsplashPhoto))
+        viewModel.isSavedUnsplashPhotoLiveData.observe(
+            viewLifecycleOwner,
+            Observer(::isSavedUnsplashPhoto)
+        )
     }
 
     private fun isSavedUnsplashPhoto(isSaved: Boolean) {
         unsplashPhoto.isSaved = isSaved
-        enableInserAndDeleteButton(unsplashPhoto.isSaved!!)
-    }
-
-    private fun enableInserAndDeleteButton(boolean: Boolean) {
-        if (boolean) {
-            binding.delete.isEnabled = true
-        } else {
-            binding.insert.isEnabled = true
-        }
-    }
-
-    private fun handleInsertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailUi) {
-        viewModel.insertUnsplashPhoto(unsplashPhoto)
-        binding.insert.isEnabled = false
-        binding.delete.isEnabled = true
-    }
-
-    private fun handleDeleteUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailUi) {
-        viewModel.deleteUnsplashPhoto(unsplashPhoto)
-        binding.delete.isEnabled = false
-        binding.insert.isEnabled = true
+        // animation
+        populateFavoriteIconView(isSaved)
     }
 
     private fun bindViews() {
@@ -127,12 +184,6 @@ class UnsplashPhotoDetailFragment : Fragment() {
         binding.apply {
             unsplashPhotoId.text = unsplashPhotoDetailUi.id
             loadImage(unsplashPhotoImageView, unsplashPhotoDetailUi.urlsRegular)
-        }
-        binding.insert.setOnClickListener {
-            handleInsertUnsplashPhoto(unsplashPhoto)
-        }
-        binding.delete.setOnClickListener {
-            handleDeleteUnsplashPhoto(unsplashPhoto)
         }
     }
 

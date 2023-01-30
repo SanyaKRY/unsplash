@@ -42,23 +42,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline_middle" />
 
-    <Button
-        android:id="@+id/insert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/unsplash_photo_insert"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/insert_delete_image_view"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        tools:srcCompat="@drawable/ic_image"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/unsplash_photo_delete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/insert" />
+        app:layout_constraintTop_toBottomOf="@+id/unsplash_photo_id" />
 </androidx.constraintlayout.widget.ConstraintLayout>

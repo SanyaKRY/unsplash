@@ -4,12 +4,13 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.OnConflictStrategy
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.model.UnsplashPhotoDatabase
 
 @Dao
     interface UnsplashPhotoDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(unsplashPhoto: UnsplashPhotoDatabase)
 
     @Delete
