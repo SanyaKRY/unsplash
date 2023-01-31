@@ -10,8 +10,8 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.unsplash.databinding.FragmentUnsplashPhotosBinding
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
 import com.example.unsplash.features.unsplashphotos.presentation.ui.recyclerview.UnsplashPhotosAdapter
@@ -101,7 +101,7 @@ class UnsplashPhotosFragment : Fragment() {
                 startPostponedEnterTransition()
                 true
             }
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = unsplashPhotosAdapter.apply { updateAdapter(listOfUnsplashPhotos) }
             setHasFixedSize(true)
         }
