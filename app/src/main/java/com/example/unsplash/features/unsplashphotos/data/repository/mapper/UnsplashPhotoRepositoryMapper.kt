@@ -2,10 +2,9 @@ package com.example.unsplash.features.unsplashphotos.data.repository.mapper
 
 import com.example.unsplash.core.mapper.BaseMapper
 import com.example.unsplash.features.unsplashphotos.data.datasource.api.model.UnsplashPhotoApi
-import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDetailsBundleModel
 import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDomain
-import com.example.unsplash.features.unsplashphotos.domain.model.UserDetailsBundleModel
-import com.example.unsplash.features.unsplashphotos.domain.model.UserLinksDetailsBundleModel
+import com.example.unsplash.features.unsplashphotos.domain.model.User
+import com.example.unsplash.features.unsplashphotos.domain.model.Links
 
 object ApiToDomainMapper : BaseMapper<List<UnsplashPhotoApi>, List<UnsplashPhotoDomain>> {
     override fun map(type: List<UnsplashPhotoApi>?): List<UnsplashPhotoDomain> {
@@ -13,10 +12,10 @@ object ApiToDomainMapper : BaseMapper<List<UnsplashPhotoApi>, List<UnsplashPhoto
             UnsplashPhotoDomain(
                 id = it.id,
                 urlsRegular = it.urls.regular,
-                UnsplashPhotoDetailsBundleModel(likes = it.likes),
-                UserDetailsBundleModel(
+                likes = it.likes,
+                User(
                     username = it.user.username,
-                    UserLinksDetailsBundleModel(html = it.user.links.html)
+                    Links(html = it.user.links.html)
                 )
             )
         } ?: emptyList()

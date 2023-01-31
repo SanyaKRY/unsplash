@@ -1,8 +1,6 @@
 package com.example.unsplash.features.unsplashphotos.presentation.model
 
 import android.os.Parcelable
-import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDetailsBundleModel
-import com.example.unsplash.features.unsplashphotos.domain.model.UserDetailsBundleModel
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
@@ -10,23 +8,25 @@ import kotlinx.parcelize.RawValue
 data class UnsplashPhotoUi(
     val id: String,
     val urlsRegular: String,
-    val unsplashPhotoDetailsBundleModel: @RawValue UnsplashPhotoDetailsBundleModel,
-    val userDetailsBundleModel: @RawValue UserDetailsBundleModel
+    val unsplashPhotoDetailsBundleModel: @RawValue UnsplashPhotoDetailsBundleModel
 ): Parcelable
 
 @Parcelize
 data class UnsplashPhotoDetailsBundleModel(
-    val likes: Int
+    val id: String,
+    val urlsRegular: String,
+    val likes: Int,
+    val user: User
 ): Parcelable
 
 @Parcelize
-data class UserDetailsBundleModel(
+data class User(
     val username: String,
-    val userLinksDetailsBundleModel: @RawValue UserLinksDetailsBundleModel
+    val userLinksDetailsBundleModel: @RawValue Links
 ): Parcelable
 
 @Parcelize
-data class UserLinksDetailsBundleModel(
+data class Links(
     val html: String
 ): Parcelable
 

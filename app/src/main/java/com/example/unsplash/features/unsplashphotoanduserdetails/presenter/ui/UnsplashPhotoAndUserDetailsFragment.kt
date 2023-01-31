@@ -27,9 +27,8 @@ class UnsplashPhotoAndUserDetailsFragment : Fragment() {
     ): View? {
         _binding = FragmentUnsplashPhotoAndUserDetailsBinding.inflate(inflater, container, false)
         val view = binding.root
-
         args.apply {
-            val unsplashPhoto: UnsplashPhotoAndUserDetailsUi = UiToUnsplashPhotoAndUserUiMapper.map(unsplashPhoto)
+            val unsplashPhoto: UnsplashPhotoAndUserDetailsUi = UiToUnsplashPhotoAndUserUiMapper.map(unsplashPhoto.unsplashPhotoDetailsBundleModel)
 
             binding.unsplashPhotoId.text = getString(R.string.unsplash_photo_id, unsplashPhoto.id)
             binding.unsplashPhotoLikes.text = getString(R.string.unsplash_photo_likes, unsplashPhoto.likes.likes)

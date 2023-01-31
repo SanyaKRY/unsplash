@@ -3,19 +3,15 @@ package com.example.unsplash.features.unsplashphotos.domain.model
 data class UnsplashPhotoDomain(
     val id: String,
     val urlsRegular: String,
-    val unsplashPhotoDetailsBundleModel: UnsplashPhotoDetailsBundleModel,
-    val userDetailsBundleModel: UserDetailsBundleModel
+    val likes: Int,
+    val user: User
 )
 
-data class UnsplashPhotoDetailsBundleModel(
-    val likes: Int
-)
-
-data class UserDetailsBundleModel(
+data class User(
     val username: String,
-    val userLinksDetailsBundleModel: UserLinksDetailsBundleModel
+    val links: Links
 )
 
-data class UserLinksDetailsBundleModel(
+data class Links(
     val html: String
 )
