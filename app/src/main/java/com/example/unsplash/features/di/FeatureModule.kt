@@ -33,6 +33,8 @@ val featureModule = module {
             isSavedUnsplashPhotoUseCase = get()
         )
     }
-    factory { (unsplashPhotoDetailListener: (unsplashPhotoUi: UnsplashPhotoUi, AppCompatImageView, TextView) -> Unit) ->
-        UnsplashPhotosAdapter(unsplashPhotoDetailListener = unsplashPhotoDetailListener) }
+    factory { (unsplashPhotoDetailListener: (unsplashPhotoUi: UnsplashPhotoUi, AppCompatImageView, TextView) -> Unit,
+                  unsplashPhotoAndUserDetailsListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit) ->
+        UnsplashPhotosAdapter(unsplashPhotoDetailListener = unsplashPhotoDetailListener,
+            unsplashPhotoAndUserDetailsListener = unsplashPhotoAndUserDetailsListener) }
 }

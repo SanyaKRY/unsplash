@@ -15,7 +15,8 @@ import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashP
 class UnsplashPhotosAdapter(
     private val unsplashPhotoDetailListener: (
         unsplashPhotoUi: UnsplashPhotoUi, imageView: AppCompatImageView, textView: TextView
-    ) -> Unit
+    ) -> Unit,
+    private val unsplashPhotoAndUserDetailsListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     private val listOfUnsplashPhotos = mutableListOf<UnsplashPhotoUi>()
@@ -28,6 +29,7 @@ class UnsplashPhotosAdapter(
 
 
         setUnsplashPhotoItemListener(viewHolder)
+        setItemListener(viewHolder)
         avoidMultipleClicks(itemViewHolder.root)
 
 
@@ -52,8 +54,18 @@ class UnsplashPhotosAdapter(
         }, 1000)
     }
 
-    private fun setUnsplashPhotoItemListener(viewHolder: ViewHolder) {
+
+    private fun setItemListener(viewHolder: ViewHolder) {
         viewHolder.itemView.setOnClickListener {
+            val position = viewHolder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                unsplashPhotoAndUserDetailsListener.invoke(listOfUnsplashPhotos[position])
+            }
+        }
+    }
+
+    private fun setUnsplashPhotoItemListener(viewHolder: ViewHolder) {
+        viewHolder.binding.unsplashPhotoImage.setOnClickListener {
             val position = viewHolder.bindingAdapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 unsplashPhotoDetailListener.invoke(

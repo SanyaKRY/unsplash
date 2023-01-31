@@ -42,7 +42,18 @@ class UnsplashPhotosFragment : Fragment() {
                 findNavController().navigate(action, extras)
     }
 
-    private val unsplashPhotosAdapter: UnsplashPhotosAdapter by inject{parametersOf(unsplashPhotoDetailListener)}
+    private val unsplashPhotoAndUserDetailsListener: (
+        unsplashPhotoUi: UnsplashPhotoUi
+    ) -> Unit = {
+            unsplashPhotoUi ->
+        val action = UnsplashPhotosFragmentDirections
+            .actionUnsplashPhotosFragmentToUnsplashPhotoAndUserDetailsFragment(unsplashPhotoUi)
+        findNavController().navigate(action)
+    }
+
+    private val unsplashPhotosAdapter: UnsplashPhotosAdapter by inject{
+        parametersOf(unsplashPhotoDetailListener, unsplashPhotoAndUserDetailsListener)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
