@@ -5,17 +5,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.unsplash.R
 import com.example.unsplash.databinding.FragmentUnsplashPhotosBinding
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
 import com.example.unsplash.features.unsplashphotos.presentation.ui.recyclerview.UnsplashPhotosAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
+import com.example.unsplash.features.unsplashphotos.utils.startAnimation
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -69,6 +75,31 @@ class UnsplashPhotosFragment : Fragment() {
 
     private fun bindViews() {
         recyclerView = binding.recyclerView
+        bindFab()
+    }
+
+    private fun bindFab() {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.circle_explosion_anim).apply {
+            duration = 700
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+        binding.floatingActionButton.setOnClickListener {
+            binding.floatingActionButton.isVisible = false
+            binding.circle.isVisible = true
+            binding.circle.startAnimation(animation) {
+
+                // display your fragment
+
+                val action = UnsplashPhotosFragmentDirections
+                    .actionUnsplashPhotosFragmentToSomeFragment()
+                findNavController().navigate(action)
+
+                context?.let {
+                    binding.root.setBackgroundColor(ContextCompat.getColor(it, R.color.purple_200))
+                }
+                binding.circle.isVisible = false
+            }
+        }
     }
 
     private fun observerLiveData() {

@@ -20,6 +20,9 @@
             app:exitAnim="@anim/to_right"
             app:popEnterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_left" />
+        <action
+            android:id="@+id/action_unsplashPhotosFragment_to_someFragment"
+            app:destination="@id/someFragment" />
     </fragment>
     <fragment
         android:id="@+id/unsplashPhotoDetailFragment"
@@ -47,5 +50,14 @@
         <argument
             android:name="unsplashPhoto"
             app:argType="com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi" />
+    </fragment>
+    <fragment
+        android:id="@+id/someFragment"
+        android:name="com.example.unsplash.features.somefeature.presenter.ui.SomeFragment"
+        android:label="fragment_some"
+        tools:layout="@layout/fragment_some" >
+        <action
+            android:id="@+id/action_someFragment_to_unsplashPhotosFragment"
+            app:destination="@id/unsplashPhotosFragment" />
     </fragment>
 </navigation>
