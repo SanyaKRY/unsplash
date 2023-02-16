@@ -27,11 +27,9 @@ class UnsplashPhotosAdapter(
 
         val viewHolder = ViewHolder(itemViewHolder)
 
-
         setUnsplashPhotoItemListener(viewHolder)
         setItemListener(viewHolder)
         avoidMultipleClicks(itemViewHolder.root)
-
 
         return viewHolder
     }
@@ -53,7 +51,6 @@ class UnsplashPhotosAdapter(
             view.isClickable = true
         }, 1000)
     }
-
 
     private fun setItemListener(viewHolder: ViewHolder) {
         viewHolder.itemView.setOnClickListener {

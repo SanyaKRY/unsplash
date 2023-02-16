@@ -1,6 +1,7 @@
 package com.example.unsplash.features.unsplashphotos.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +12,16 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.unsplash.R
 import com.example.unsplash.databinding.FragmentUnsplashPhotosBinding
+import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoPagingAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
-import com.example.unsplash.features.unsplashphotos.presentation.ui.recyclerview.UnsplashPhotosAdapter
+import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoLoadStateAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
 import com.example.unsplash.features.unsplashphotos.utils.startAnimation
 import org.koin.android.ext.android.inject
@@ -56,8 +58,7 @@ class UnsplashPhotosFragment : Fragment() {
             .actionUnsplashPhotosFragmentToUnsplashPhotoAndUserDetailsFragment(unsplashPhotoUi)
         findNavController().navigate(action)
     }
-
-    private val unsplashPhotosAdapter: UnsplashPhotosAdapter by inject{
+    private val unsplashPhotoPagingAdapter: UnsplashPhotoPagingAdapter by inject{
         parametersOf(unsplashPhotoDetailListener, unsplashPhotoAndUserDetailsListener)
     }
 
@@ -67,15 +68,50 @@ class UnsplashPhotosFragment : Fragment() {
     ): View? {
         _binding = FragmentUnsplashPhotosBinding.inflate(inflater, container, false)
         val view = binding.root
+
         bindViews()
+        customizeRecyclerView()
         observerLiveData()
+        setLoadStateListener()
 
         return view
     }
 
+    private fun setLoadStateListener() {
+
+        binding.recyclerView.adapter = unsplashPhotoPagingAdapter.withLoadStateFooter(
+            footer = UnsplashPhotoLoadStateAdapter()
+        )
+
+        unsplashPhotoPagingAdapter.addLoadStateListener { loadState ->
+            binding.apply {
+                // Loading or NotLoading
+                spinner.root.visibility = if (loadState.source.refresh is LoadState.Loading) View.VISIBLE else View.GONE
+                recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
+
+                // error
+                if (loadState.source.refresh is LoadState.Error) {
+                    // TODO
+                    Log.d("PetProject","Exception (: + ${loadState.source.refresh}")
+                }
+
+                // empty view
+                if (loadState.source.refresh is LoadState.NotLoading &&
+                    loadState.append.endOfPaginationReached &&
+                    unsplashPhotoPagingAdapter.itemCount < 1
+                ) {
+                    recyclerView.isVisible = false
+                    // TODO
+                } else {
+                    // TODO
+                }
+            }
+        }
+    }
+
     private fun bindViews() {
-        recyclerView = binding.recyclerView
         bindFab()
+        bindRecycler()
     }
 
     private fun bindFab() {
@@ -87,13 +123,8 @@ class UnsplashPhotosFragment : Fragment() {
             binding.floatingActionButton.isVisible = false
             binding.circle.isVisible = true
             binding.circle.startAnimation(animation) {
-
-                // display your fragment
-
-                val action = UnsplashPhotosFragmentDirections
-                    .actionUnsplashPhotosFragmentToSomeFragment()
+                val action = UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToSomeFragment()
                 findNavController().navigate(action)
-
                 context?.let {
                     binding.root.setBackgroundColor(ContextCompat.getColor(it, R.color.purple_200))
                 }
@@ -102,39 +133,27 @@ class UnsplashPhotosFragment : Fragment() {
         }
     }
 
-    private fun observerLiveData() {
-        viewModel.unsplashPhotosLiveData.observe(viewLifecycleOwner, Observer(::onUnsplashPhotosReceived))
-        viewModel.isLoadingLiveData.observe(viewLifecycleOwner, Observer(::onLoadingStateReceived))
+    private fun bindRecycler() {
+        recyclerView = binding.recyclerView
     }
 
-    private fun onLoadingStateReceived(isLoading: Boolean) {
-        showSpinner(isLoading)
-    }
-
-    private fun showSpinner(isLoading: Boolean) {
-        binding.spinner.apply {
-            root.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
-    }
-
-    private fun onUnsplashPhotosReceived(listOfUnsplashPhotos: List<UnsplashPhotoUi>) {
-        showUnsplashPhotos(listOfUnsplashPhotos)
-    }
-
-    private fun showUnsplashPhotos(listOfUnsplashPhotos: List<UnsplashPhotoUi>) {
-        populateRecyclerView(listOfUnsplashPhotos)
-    }
-
-    private fun populateRecyclerView(listOfUnsplashPhotos: List<UnsplashPhotoUi>) {
+    private fun customizeRecyclerView() {
         recyclerView?.apply {
             postponeEnterTransition()
             viewTreeObserver.addOnPreDrawListener {
                 startPostponedEnterTransition()
                 true
             }
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            adapter = unsplashPhotosAdapter.apply { updateAdapter(listOfUnsplashPhotos) }
+//            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = LinearLayoutManager(context)
+            adapter = unsplashPhotoPagingAdapter
             setHasFixedSize(true)
+        }
+    }
+
+    private fun observerLiveData() {
+        viewModel.unsplashPhotos.observe(viewLifecycleOwner) {
+            unsplashPhotoPagingAdapter.submitData(viewLifecycleOwner.lifecycle, it)
         }
     }
 

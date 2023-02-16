@@ -8,6 +8,7 @@ import com.example.unsplash.features.unsplashphotodetail.domain.usecase.IsSavedU
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import com.example.unsplash.features.unsplashphotodetail.presenter.vm.UnsplashPhotoDetailViewModel
 import com.example.unsplash.features.unsplashphotos.domain.usecase.GetListOfUnsplashPhotosUseCase
+import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoPagingAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
 import com.example.unsplash.features.unsplashphotos.presentation.ui.recyclerview.UnsplashPhotosAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
@@ -33,6 +34,12 @@ val featureModule = module {
             isSavedUnsplashPhotoUseCase = get()
         )
     }
+    factory { (unsplashPhotoDetailListener: (unsplashPhotoUi: UnsplashPhotoUi, AppCompatImageView, TextView) -> Unit,
+                  unsplashPhotoAndUserDetailsListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit) ->
+        UnsplashPhotoPagingAdapter(unsplashPhotoDetailListener = unsplashPhotoDetailListener,
+            unsplashPhotoAndUserDetailsListener = unsplashPhotoAndUserDetailsListener) }
+
+    // TODO don't use
     factory { (unsplashPhotoDetailListener: (unsplashPhotoUi: UnsplashPhotoUi, AppCompatImageView, TextView) -> Unit,
                   unsplashPhotoAndUserDetailsListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit) ->
         UnsplashPhotosAdapter(unsplashPhotoDetailListener = unsplashPhotoDetailListener,

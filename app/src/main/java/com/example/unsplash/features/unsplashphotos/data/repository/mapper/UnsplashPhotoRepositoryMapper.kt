@@ -1,5 +1,7 @@
 package com.example.unsplash.features.unsplashphotos.data.repository.mapper
 
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.example.unsplash.core.mapper.BaseMapper
 import com.example.unsplash.features.unsplashphotos.data.datasource.api.model.UnsplashPhotoApi
 import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDomain
@@ -19,5 +21,19 @@ object ApiToDomainMapper : BaseMapper<List<UnsplashPhotoApi>, List<UnsplashPhoto
                 )
             )
         } ?: emptyList()
+    }
+}
+
+object PagingApiToPagingDomainMapper : BaseMapper<UnsplashPhotoApi, UnsplashPhotoDomain> {
+    override fun map(type: UnsplashPhotoApi?): UnsplashPhotoDomain {
+        return UnsplashPhotoDomain(
+                id = type!!.id,
+                urlsRegular = type.urls.regular,
+                likes = type.likes,
+                User(
+                    username = type.user.username,
+                    Links(html = type.user.links.html)
+                )
+            )
     }
 }

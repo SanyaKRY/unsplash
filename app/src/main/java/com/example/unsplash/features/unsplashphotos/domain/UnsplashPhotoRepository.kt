@@ -1,9 +1,10 @@
 package com.example.unsplash.features.unsplashphotos.domain
 
-import com.example.unsplash.core.datatype.Result
+import androidx.lifecycle.LiveData
+import androidx.paging.PagingData
 import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDomain
 
 interface UnsplashPhotoRepository {
 
-    suspend fun getListOfUnsplashPhotos(): Result<List<UnsplashPhotoDomain>?>
+    fun getListOfUnsplashPhotos(): LiveData<PagingData<UnsplashPhotoDomain>>
 }
