@@ -1,82 +1,41 @@
 package com.example.unsplash.features.unsplashphotos.presentation.ui.paging
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.unsplash.databinding.ItemErrorBinding
-import com.example.unsplash.databinding.ItemProgressBinding
+import com.example.unsplash.databinding.LoadStateBinding
 
-class UnsplashPhotoLoadStateAdapter : LoadStateAdapter<UnsplashPhotoLoadStateAdapter.ItemViewHolder>() {
+class UnsplashPhotoLoadStateAdapter : LoadStateAdapter<UnsplashPhotoLoadStateAdapter.LoadStateViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): ItemViewHolder {
-        return when(loadState) {
-            LoadState.Loading -> ProgressViewHolder(LayoutInflater.from(parent.context), parent)
-            is LoadState.Error -> ErrorViewHolder(LayoutInflater.from(parent.context), parent)
-            is LoadState.NotLoading -> error("Not supported")
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder {
+        val itemViewHolder = LoadStateBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false)
+        val viewHolder = LoadStateViewHolder(itemViewHolder)
+        return viewHolder
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, loadState: LoadState) {
-        holder.bind(loadState)
+    override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
+        holder.bindTo(loadState)
     }
 
-    abstract class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class LoadStateViewHolder(
+        val binding: LoadStateBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        abstract fun bind(loadState: LoadState)
-    }
+        private val progressBar = binding.progressBar
+        private val errorMsg = binding.errorMessage
+        private var loadState : LoadState? = null
 
-    class ProgressViewHolder internal constructor(
-        private val binding: ItemProgressBinding
-    ) : ItemViewHolder(binding.root) {
+        fun bindTo(loadState: LoadState) {
+            this.loadState = loadState
+            errorMsg.isVisible = loadState !is LoadState.Loading
+            progressBar.isVisible = loadState is LoadState.Loading
 
-        override fun bind(loadState: LoadState) {
-            // Do nothing
-        }
-
-        companion object {
-
-            operator fun invoke(
-                layoutInflater: LayoutInflater,
-                parent: ViewGroup? = null,
-                attachToRoot: Boolean = false
-            ): ProgressViewHolder {
-                return ProgressViewHolder(
-                    ItemProgressBinding.inflate(
-                        layoutInflater,
-                        parent,
-                        attachToRoot
-                    )
-                )
-            }
-        }
-    }
-
-    class ErrorViewHolder internal constructor(
-        private val binding: ItemErrorBinding
-    ) : ItemViewHolder(binding.root) {
-
-        override fun bind(loadState: LoadState) {
-
-            require(loadState is LoadState.Error)
-            binding.errorMessage.text = loadState.error.localizedMessage
-        }
-
-        companion object {
-            operator fun invoke(
-                layoutInflater: LayoutInflater,
-                parent: ViewGroup? = null,
-                attachToRoot: Boolean = false
-            ): ErrorViewHolder {
-                return ErrorViewHolder(
-                    ItemErrorBinding.inflate(
-                        layoutInflater,
-                        parent,
-                        attachToRoot
-                    )
-                )
+            if (loadState is LoadState.Error) {
+                errorMsg.text = loadState.error.localizedMessage
             }
         }
     }

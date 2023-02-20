@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.unsplash.features.unsplashphotos.data.datasource.api.UnsplashPhotoNetworkDataSource
-import com.example.unsplash.features.unsplashphotos.data.datasource.api.exceptions.handleNetworkExceptions
 import com.example.unsplash.features.unsplashphotos.data.datasource.api.model.UnsplashPhotoApi
 
 class UncplashPhotoPagingSource(
@@ -44,7 +43,7 @@ class UncplashPhotoPagingSource(
             LoadResult.Page(response, prevKey, nextKey)
         } catch (e: Exception) {
             Log.d("PetProject", "class UncplashPhotoPagingSource $e")
-            LoadResult.Error(handleNetworkExceptions(e))
+            LoadResult.Error(e)
         }
     }
 }
