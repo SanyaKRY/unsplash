@@ -1,5 +1,6 @@
 package com.example.unsplash.features.unsplashphotodetail.data.datasource.database
 
+import androidx.lifecycle.LiveData
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.dao.UnsplashPhotoDao
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.model.UnsplashPhotoDatabase
 import com.example.unsplash.features.unsplashphotodetail.data.repository.mapper.DomainToDatabaseMapper
@@ -17,5 +18,9 @@ class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) 
 
     suspend fun searchUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): UnsplashPhotoDatabase {
         return unsplashPhotoDao.search(DomainToDatabaseMapper.map(unsplashPhoto).id)
+    }
+
+    fun getAllUnsplashPhotos(): LiveData<List<UnsplashPhotoDatabase>> {
+        return unsplashPhotoDao.getAllUnsplashPhotos()
     }
 }

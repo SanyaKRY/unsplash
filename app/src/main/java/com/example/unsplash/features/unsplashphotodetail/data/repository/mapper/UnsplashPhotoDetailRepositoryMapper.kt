@@ -23,3 +23,15 @@ object DatabaseToDetailDomainMapper : BaseMapper<UnsplashPhotoDatabase, Unsplash
         )
     }
 }
+
+object DatabaseListToDetailDomainListMapper : BaseMapper<List<UnsplashPhotoDatabase>, List<UnsplashPhotoDetailDomain>> {
+    override fun map(type: List<UnsplashPhotoDatabase>?): List<UnsplashPhotoDetailDomain> {
+        return type?.map {
+            UnsplashPhotoDetailDomain(
+                id = it.id,
+                urlsRegular = it.urlsRegular,
+                isSaved = it.isSaved
+            )
+        } ?: emptyList()
+    }
+}

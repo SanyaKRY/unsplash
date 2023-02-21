@@ -2,6 +2,8 @@ package com.example.unsplash.features.unsplashphotodetail.data.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.unsplash.features.somefeature.data.repository.UnsplashPhotosRepositoryImpl
+import com.example.unsplash.features.somefeature.domain.UnsplashPhotosRepository
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.UnsplashPhotoDBDataSource
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.UnsplashPhotoDatabase
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.dao.UnsplashPhotoDao
@@ -27,6 +29,12 @@ val unsplashPhotoDatabaseModule = module {
         UnsplashPhotoDetailRepositoryImpl(
             unsplashPhotoDBDataSource = get()
         ) as UnsplashPhotoDetailRepository
+    }
+
+    single {
+        UnsplashPhotosRepositoryImpl(
+            unsplashPhotoDBDataSource = get()
+        ) as UnsplashPhotosRepository
     }
 }
 
