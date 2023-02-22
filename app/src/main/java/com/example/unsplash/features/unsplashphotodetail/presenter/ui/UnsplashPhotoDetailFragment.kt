@@ -131,7 +131,7 @@ class UnsplashPhotoDetailFragment : Fragment() {
             startEnterTransitionAfterLoadingImage(unsplashPhoto.urlsRegular, this)
         }
         binding.unsplashPhotoId.apply {
-            transitionName = unsplashPhoto.id
+            transitionName = unsplashPhoto.unsplashPhotoId
         }
     }
 
@@ -182,7 +182,7 @@ class UnsplashPhotoDetailFragment : Fragment() {
         val unsplashPhotoDetailUi = UiToDetailUiMapper.map(args.unsplashPhoto)
         unsplashPhoto = unsplashPhotoDetailUi
         binding.apply {
-            unsplashPhotoId.text = unsplashPhotoDetailUi.id
+            unsplashPhotoId.text = unsplashPhotoDetailUi.unsplashPhotoId
             loadImage(unsplashPhotoImageView, unsplashPhotoDetailUi.urlsRegular)
         }
     }

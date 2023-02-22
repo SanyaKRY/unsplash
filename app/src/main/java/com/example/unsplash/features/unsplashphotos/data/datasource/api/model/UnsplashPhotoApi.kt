@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class UnsplashPhotoApi(
-    @Json(name = "id") val id: String,
+    @Json(name = "id") val unsplashPhotoId: String,
     @Json(name = "urls") val urls: Urls,
     @Json(name = "likes") val likes: Int,
     @Json(name = "user") val user: User

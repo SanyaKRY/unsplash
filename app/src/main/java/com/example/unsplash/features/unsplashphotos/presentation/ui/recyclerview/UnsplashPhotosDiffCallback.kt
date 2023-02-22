@@ -7,7 +7,7 @@ class UnsplashPhotosDiffCallback(private val oldUnsplashPhotos: List<UnsplashPho
                                  private val newUnsplashPhotos: List<UnsplashPhotoUi>) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-        oldUnsplashPhotos[oldItemPosition].id == newUnsplashPhotos[newItemPosition].id
+        oldUnsplashPhotos[oldItemPosition].unsplashPhotoId == newUnsplashPhotos[newItemPosition].unsplashPhotoId
 
     override fun getOldListSize(): Int = oldUnsplashPhotos.size
 

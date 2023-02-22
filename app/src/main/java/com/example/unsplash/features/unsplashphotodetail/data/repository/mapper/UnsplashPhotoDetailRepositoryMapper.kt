@@ -7,7 +7,8 @@ import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPh
 object DomainToDatabaseMapper : BaseMapper<UnsplashPhotoDetailDomain, UnsplashPhotoDatabase> {
     override fun map(type: UnsplashPhotoDetailDomain?): UnsplashPhotoDatabase {
         return UnsplashPhotoDatabase(
-            id = type?.id ?: "",
+            id = type?.id ?: 0,
+            unsplashPhotoId = type?.unsplashPhotoId ?: "",
             urlsRegular = type?.urlsRegular ?: "",
             isSaved = type?.isSaved
         )
@@ -18,6 +19,7 @@ object DatabaseToDetailDomainMapper : BaseMapper<UnsplashPhotoDatabase, Unsplash
     override fun map(type: UnsplashPhotoDatabase?): UnsplashPhotoDetailDomain {
         return UnsplashPhotoDetailDomain(
             id = type!!.id,
+            unsplashPhotoId = type.unsplashPhotoId,
             urlsRegular = type.urlsRegular,
             isSaved = type.isSaved
         )
@@ -28,7 +30,8 @@ object DatabaseListToDetailDomainListMapper : BaseMapper<List<UnsplashPhotoDatab
     override fun map(type: List<UnsplashPhotoDatabase>?): List<UnsplashPhotoDetailDomain> {
         return type?.map {
             UnsplashPhotoDetailDomain(
-                id = it.id,
+                id = it!!.id,
+                unsplashPhotoId = it.unsplashPhotoId,
                 urlsRegular = it.urlsRegular,
                 isSaved = it.isSaved
             )

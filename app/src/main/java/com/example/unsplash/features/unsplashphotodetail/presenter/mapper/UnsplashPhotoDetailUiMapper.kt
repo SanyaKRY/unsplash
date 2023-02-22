@@ -9,7 +9,8 @@ import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashP
 object UiToDetailUiMapper : BaseMapper<UnsplashPhotoUi, UnsplashPhotoDetailUi> {
     override fun map(type: UnsplashPhotoUi?): UnsplashPhotoDetailUi {
         return UnsplashPhotoDetailUi(
-            id = type?.id ?: "",
+            id = 0,
+            unsplashPhotoId = type?.unsplashPhotoId ?: "",
             urlsRegular = type?.urlsRegular ?: "",
             isSaved = null
         )
@@ -19,7 +20,8 @@ object UiToDetailUiMapper : BaseMapper<UnsplashPhotoUi, UnsplashPhotoDetailUi> {
 object DetailUiToDetailDomainMapper : BaseMapper<UnsplashPhotoDetailUi, UnsplashPhotoDetailDomain> {
     override fun map(type: UnsplashPhotoDetailUi?): UnsplashPhotoDetailDomain {
         return UnsplashPhotoDetailDomain(
-            id = type?.id ?: "",
+            id = type?.id ?: 0,
+            unsplashPhotoId = type?.unsplashPhotoId ?: "",
             urlsRegular = type?.urlsRegular ?: "",
             isSaved = type?.isSaved
         )
@@ -31,6 +33,7 @@ object DetailDomainListToDetailUiListMapper : BaseMapper<List<UnsplashPhotoDetai
         return type?.map {
             UnsplashPhotoDetailUi(
                 id = it.id,
+                unsplashPhotoId = it.unsplashPhotoId,
                 urlsRegular = it.urlsRegular,
                 isSaved = it.isSaved
             )

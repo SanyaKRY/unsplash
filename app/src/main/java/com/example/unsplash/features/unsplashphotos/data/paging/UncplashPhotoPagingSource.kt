@@ -34,11 +34,11 @@ class UncplashPhotoPagingSource(
                 perPage = pageSize
             )
 
+            Log.d("PetProject", "response.size: ${response?.size}, pageSize: $pageSize")
+            response?.forEach { System.out.print(Log.d("ApiTroubleshooting", "${it.unsplashPhotoId} ")) }
+
             val prevKey = if (currentPage == 1) null else currentPage - 1
             val nextKey = if (response!!.size < pageSize) null else currentPage + 1
-
-            Log.d("PetProject", "response.size: ${response.size}, pageSize: $pageSize")
-            Log.d("PetProject", "currentPage: $currentPage")
 
             LoadResult.Page(response, prevKey, nextKey)
         } catch (e: Exception) {

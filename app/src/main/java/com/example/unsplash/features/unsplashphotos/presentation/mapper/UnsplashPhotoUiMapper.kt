@@ -1,7 +1,6 @@
 package com.example.unsplash.features.unsplashphotos.presentation.mapper
 
 import com.example.unsplash.core.mapper.BaseMapper
-import com.example.unsplash.features.unsplashphotos.data.datasource.api.model.UnsplashPhotoApi
 import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDomain
 import com.example.unsplash.features.unsplashphotos.presentation.model.*
 
@@ -9,10 +8,10 @@ object DomainToUiMapper : BaseMapper<List<UnsplashPhotoDomain>, List<UnsplashPho
     override fun map(type: List<UnsplashPhotoDomain>?): List<UnsplashPhotoUi> {
         return type?.map {
             UnsplashPhotoUi(
-                id = it.id,
+                unsplashPhotoId = it.unsplashPhotoId,
                 urlsRegular = it.urlsRegular,
                 UnsplashPhotoDetailsBundleModel(
-                    id = it.id,
+                    id = it.unsplashPhotoId,
                     urlsRegular = it.urlsRegular,
                     likes = it.likes,
                     User(
@@ -28,10 +27,10 @@ object DomainToUiMapper : BaseMapper<List<UnsplashPhotoDomain>, List<UnsplashPho
 object PagingDomainToUiMapper : BaseMapper<UnsplashPhotoDomain, UnsplashPhotoUi> {
     override fun map(type: UnsplashPhotoDomain?): UnsplashPhotoUi {
         return UnsplashPhotoUi(
-            id = type!!.id,
+            unsplashPhotoId = type!!.unsplashPhotoId,
             urlsRegular = type.urlsRegular,
             unsplashPhotoDetailsBundleModel = UnsplashPhotoDetailsBundleModel(
-                id = type.id,
+                id = type.unsplashPhotoId,
                 urlsRegular = type.urlsRegular,
                 likes = type.likes,
                 User(

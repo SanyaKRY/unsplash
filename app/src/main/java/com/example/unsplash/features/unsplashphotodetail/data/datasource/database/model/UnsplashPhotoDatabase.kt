@@ -5,8 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "unsplash_photo_table")
 data class UnsplashPhotoDatabase(
-    @PrimaryKey
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    var id : Int,
+    val unsplashPhotoId: String,
     val urlsRegular: String,
     val isSaved: Boolean?
 )

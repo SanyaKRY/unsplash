@@ -17,7 +17,7 @@ class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) 
     }
 
     suspend fun searchUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): UnsplashPhotoDatabase {
-        return unsplashPhotoDao.search(DomainToDatabaseMapper.map(unsplashPhoto).id)
+        return unsplashPhotoDao.search(DomainToDatabaseMapper.map(unsplashPhoto).unsplashPhotoId)
     }
 
     fun getAllUnsplashPhotos(): LiveData<List<UnsplashPhotoDatabase>> {

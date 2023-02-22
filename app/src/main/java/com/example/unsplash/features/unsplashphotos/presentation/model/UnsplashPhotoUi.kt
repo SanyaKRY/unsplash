@@ -6,7 +6,7 @@ import kotlinx.parcelize.RawValue
 
 @Parcelize
 data class UnsplashPhotoUi(
-    val id: String,
+    val unsplashPhotoId: String,
     val urlsRegular: String,
     val unsplashPhotoDetailsBundleModel: @RawValue UnsplashPhotoDetailsBundleModel
 ): Parcelable

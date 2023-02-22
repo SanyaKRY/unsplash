@@ -13,7 +13,7 @@ class ViewHolderDatabase(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(unsplashPhotoItem: UnsplashPhotoDetailUi) {
-        binding.unsplashPhotoId.text = unsplashPhotoItem.id
+        binding.unsplashPhotoId.text = unsplashPhotoItem.unsplashPhotoId
         loadImage(binding.unsplashPhotoImage, unsplashPhotoItem.urlsRegular)
 
         setTransitionNames(binding.unsplashPhotoImage, binding.unsplashPhotoId, unsplashPhotoItem)
@@ -21,7 +21,7 @@ class ViewHolderDatabase(
 
     private fun setTransitionNames(imageView: AppCompatImageView, textView: TextView, unsplashPhotoItem: UnsplashPhotoDetailUi) {
         imageView.transitionName = unsplashPhotoItem.urlsRegular
-        textView.transitionName = unsplashPhotoItem.id
+        textView.transitionName = unsplashPhotoItem.unsplashPhotoId
     }
 
     private fun loadImage(imageView: AppCompatImageView, imageUri: String) {

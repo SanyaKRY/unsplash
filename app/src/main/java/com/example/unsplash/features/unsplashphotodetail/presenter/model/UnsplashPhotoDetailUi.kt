@@ -1,7 +1,8 @@
 package com.example.unsplash.features.unsplashphotodetail.presenter.model
 
 data class UnsplashPhotoDetailUi(
-    val id: String,
+    var id: Int,
+    val unsplashPhotoId: String,
     val urlsRegular: String,
     var isSaved: Boolean?
 )

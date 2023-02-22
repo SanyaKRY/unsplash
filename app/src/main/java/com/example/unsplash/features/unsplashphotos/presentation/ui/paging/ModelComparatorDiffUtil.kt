@@ -8,7 +8,7 @@ object ModelComparatorDiffUtil : DiffUtil.ItemCallback<UnsplashPhotoUi>() {
     override fun areItemsTheSame(
         oldItem: UnsplashPhotoUi,
         newItem: UnsplashPhotoUi
-    ) = oldItem.id == newItem.id
+    ) = oldItem.unsplashPhotoId == newItem.unsplashPhotoId
 
     override fun areContentsTheSame(
         oldItem: UnsplashPhotoUi,

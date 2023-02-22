@@ -11,7 +11,7 @@ import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashP
 class ViewHolder(val binding: UnsplashPhotoItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(unsplashPhotoItem: UnsplashPhotoUi) {
-        binding.unsplashPhotoId.text = unsplashPhotoItem.id
+        binding.unsplashPhotoId.text = unsplashPhotoItem.unsplashPhotoId
         loadImage(binding.unsplashPhotoImage, unsplashPhotoItem.urlsRegular)
 
         setTransitionNames(binding.unsplashPhotoImage, binding.unsplashPhotoId, unsplashPhotoItem)
@@ -19,7 +19,7 @@ class ViewHolder(val binding: UnsplashPhotoItemBinding) : RecyclerView.ViewHolde
 
     private fun setTransitionNames(imageView: AppCompatImageView, textView: TextView, unsplashPhotoItem: UnsplashPhotoUi) {
         imageView.transitionName = unsplashPhotoItem.urlsRegular
-        textView.transitionName = unsplashPhotoItem.id
+        textView.transitionName = unsplashPhotoItem.unsplashPhotoId
     }
 
     private fun loadImage(imageView: AppCompatImageView, imageUri: String) {

@@ -1,7 +1,7 @@
 package com.example.unsplash.features.unsplashphotos.domain.model
 
 data class UnsplashPhotoDomain(
-    val id: String,
+    val unsplashPhotoId: String,
     val urlsRegular: String,
     val likes: Int,
     val user: User

@@ -44,7 +44,7 @@ class UnsplashPhotosFragment : Fragment() {
             unsplashPhotoUi, imageView, textView ->
                 val extras = FragmentNavigatorExtras(
                     imageView to unsplashPhotoUi.urlsRegular,
-                    textView to unsplashPhotoUi.id
+                    textView to unsplashPhotoUi.unsplashPhotoId
                 )
                 val action = UnsplashPhotosFragmentDirections
                     .actionUnsplashPhotosFragmentToUnsplashPhotoDetailFragment(unsplashPhotoUi)
@@ -145,8 +145,8 @@ class UnsplashPhotosFragment : Fragment() {
                 startPostponedEnterTransition()
                 true
             }
-//            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+//            layoutManager = LinearLayoutManager(context)
             adapter = unsplashPhotoPagingAdapter
             setHasFixedSize(true)
         }

@@ -26,7 +26,7 @@ class UnsplashPhotoDetailViewModel(
 
     init {
         Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel ${this.toString()}")
-        Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel unsplashPhoto ${unsplashPhoto.id}")
+        Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel unsplashPhoto ${unsplashPhoto.unsplashPhotoId}")
         isSavedUnsplashPhoto(unsplashPhoto)
     }
 
