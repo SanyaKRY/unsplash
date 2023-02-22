@@ -18,11 +18,27 @@ class UnsplashPhotosRepositoryImpl(
         }
     }
 
+    override suspend fun deleteAllUnsplashPhoto() {
+        return unsplashPhotoDBDataSource.deleteAllUnsplashPhoto()
+    }
+
     override suspend fun deleteUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain) {
         return unsplashPhotoDBDataSource.deleteUnsplashPhoto(unsplashPhoto)
     }
 
     override suspend fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain) {
         return unsplashPhotoDBDataSource.insertUnsplashPhoto(unsplashPhoto)
+    }
+
+    override fun getAllUnsplashPhotosSortById(): LiveData<List<UnsplashPhotoDetailDomain>> {
+        return unsplashPhotoDBDataSource.getAllUnsplashPhotosSortById().map { list: List<UnsplashPhotoDatabase> ->
+            DatabaseListToDetailDomainListMapper.map(list)
+        }
+    }
+
+    override fun searchUnsplashPhoto(searchQuery: String): LiveData<List<UnsplashPhotoDetailDomain>> {
+        return unsplashPhotoDBDataSource.searchUnsplashPhotoByQuery(searchQuery).map { list: List<UnsplashPhotoDatabase> ->
+            DatabaseListToDetailDomainListMapper.map(list)
+        }
     }
 }

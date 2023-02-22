@@ -16,11 +16,23 @@ class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) 
         return unsplashPhotoDao.delete(DomainToDatabaseMapper.map(unsplashPhoto))
     }
 
+    suspend fun deleteAllUnsplashPhoto() {
+        return unsplashPhotoDao.deleteAll()
+    }
+
     suspend fun searchUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): UnsplashPhotoDatabase {
         return unsplashPhotoDao.search(DomainToDatabaseMapper.map(unsplashPhoto).unsplashPhotoId)
     }
 
     fun getAllUnsplashPhotos(): LiveData<List<UnsplashPhotoDatabase>> {
         return unsplashPhotoDao.getAllUnsplashPhotos()
+    }
+
+    fun getAllUnsplashPhotosSortById(): LiveData<List<UnsplashPhotoDatabase>> {
+        return unsplashPhotoDao.getAllUnsplashPhotosSortById()
+    }
+
+    fun searchUnsplashPhotoByQuery(searchQuery: String): LiveData<List<UnsplashPhotoDatabase>> {
+        return unsplashPhotoDao.searchByQuery(searchQuery)
     }
 }

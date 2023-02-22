@@ -7,7 +7,13 @@ interface UnsplashPhotosRepository {
 
     fun getAllUnsplashPhotos(): LiveData<List<UnsplashPhotoDetailDomain>>
 
+    suspend fun deleteAllUnsplashPhoto()
+
     suspend fun deleteUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain)
 
     suspend fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain)
+
+    fun getAllUnsplashPhotosSortById(): LiveData<List<UnsplashPhotoDetailDomain>>
+
+    fun searchUnsplashPhoto(searchQuery: String): LiveData<List<UnsplashPhotoDetailDomain>>
 }

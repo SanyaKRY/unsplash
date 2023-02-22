@@ -2,9 +2,7 @@ package com.example.unsplash.features.di
 
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import com.example.unsplash.features.somefeature.domain.usecase.DeleteUnsplashPhotoDatabaseUseCase
-import com.example.unsplash.features.somefeature.domain.usecase.GetListOfUnsplashPhotosDatabaseUseCase
-import com.example.unsplash.features.somefeature.domain.usecase.InsertUnsplashPhotoDatabaseUseCase
+import com.example.unsplash.features.somefeature.domain.usecase.*
 import com.example.unsplash.features.somefeature.presenter.ui.recyclerview.UnsplashPhotosUiAdapter
 import com.example.unsplash.features.somefeature.presenter.vm.UnsplashPhotoDatabaseViewModel
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.DeleteUnsplashPhotoUseCase
@@ -50,13 +48,19 @@ val featureModule = module {
         UnsplashPhotosAdapter(unsplashPhotoDetailListener = unsplashPhotoDetailListener,
             unsplashPhotoAndUserDetailsListener = unsplashPhotoAndUserDetailsListener) }
     factory { GetListOfUnsplashPhotosDatabaseUseCase(repository = get()) }
+    factory { DeleteAllUnsplashPhotoDatabaseUseCase(repository = get()) }
     factory { DeleteUnsplashPhotoDatabaseUseCase(repository = get()) }
     factory { InsertUnsplashPhotoDatabaseUseCase(repository = get()) }
+    factory { GetListOfUnsplashPhotosSortByIdDatabaseUseCase(repository = get()) }
+    factory { SearchUnsplashPhotoDatabaseUseCase(repository = get()) }
     viewModel {
         UnsplashPhotoDatabaseViewModel(
             getListOfUnsplashPhotosDatabaseUseCase = get(),
+            deleteAllUnsplashPhotoDatabaseUseCase = get(),
             deleteUnsplashPhotoDatabaseUseCase = get(),
-            insertUnsplashPhotoDatabaseUseCase = get()
+            insertUnsplashPhotoDatabaseUseCase = get(),
+            getListOfUnsplashPhotosSortByIdDatabaseUseCase = get(),
+            searchUnsplashPhotoDatabaseUseCase = get()
         )
     }
     factory { UnsplashPhotosUiAdapter() }

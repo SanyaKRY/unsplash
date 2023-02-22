@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/dev/git_repo/PetProject/unsplash/app/src/main/res/drawable/ic_search.xml" value="0.179" />
+        <entry key="..\:/dev/git_repo/PetProject/unsplash/app/src/main/res/drawable/ic_sort.xml" value="0.179" />
         <entry key="..\:/dev/git_repo/PetProject/unsplash/app/src/main/res/layout/activity_main.xml" value="0.22735507246376813" />
         <entry key="..\:/dev/git_repo/PetProject/unsplash/app/src/main/res/layout/fragment_some.xml" value="0.21458333333333332" />
         <entry key="..\:/dev/git_repo/PetProject/unsplash/app/src/main/res/layout/fragment_unsplash_photo_and_user_details.xml" value="0.17255434782608695" />
@@ -13,6 +15,7 @@
         <entry key="..\:/dev/git_repo/PetProject/unsplash/app/src/main/res/layout/load_state.xml" value="0.21693840579710144" />
         <entry key="..\:/dev/git_repo/PetProject/unsplash/app/src/main/res/layout/spinner.xml" value="0.253125" />
         <entry key="..\:/dev/git_repo/PetProject/unsplash/app/src/main/res/layout/unsplash_photo_item.xml" value="0.22871376811594202" />
+        <entry key="..\:/dev/git_repo/PetProject/unsplash/app/src/main/res/menu/unsplash_photo_menu.xml" value="0.253125" />
         <entry key="..\:/dev/git_repo/unsplash/app/src/main/res/layout/activity_main.xml" value="0.11626139817629179" />
         <entry key="..\:/dev/git_repo/unsplash/app/src/main/res/layout/fragment_unsplash.xml" value="0.264" />
         <entry key="..\:/dev/git_repo/unsplash/app/src/main/res/layout/row_item.xml" value="0.12310030395136778" />

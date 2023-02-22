@@ -17,9 +17,18 @@ interface UnsplashPhotoDao {
     @Delete
     suspend fun delete(unsplashPhoto: UnsplashPhotoDatabase)
 
+    @Query("DELETE FROM unsplash_photo_table")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM unsplash_photo_table WHERE unsplashPhotoId = :unsplashPhotoId")
     suspend fun search(unsplashPhotoId: String): UnsplashPhotoDatabase
 
+    @Query("SELECT * FROM unsplash_photo_table WHERE unsplashPhotoId like :searchQuery")
+    fun searchByQuery(searchQuery: String): LiveData<List<UnsplashPhotoDatabase>>
+
     @Query("SELECT * FROM unsplash_photo_table")
     fun getAllUnsplashPhotos(): LiveData<List<UnsplashPhotoDatabase>>
+
+    @Query("SELECT * FROM unsplash_photo_table ORDER BY unsplashPhotoId ASC")
+    fun getAllUnsplashPhotosSortById(): LiveData<List<UnsplashPhotoDatabase>>
 }
