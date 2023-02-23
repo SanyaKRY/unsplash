@@ -1,13 +1,17 @@
 package com.example.unsplash.features.unsplashphotodetail.presenter.vm
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.DeleteUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.InsertUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.IsSavedUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.DetailUiToDetailDomainMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import com.example.unsplash.core.datatype.Result
 
 class UnsplashPhotoDetailViewModel(
     private val unsplashPhoto: UnsplashPhotoDetailUi,
@@ -16,13 +20,9 @@ class UnsplashPhotoDetailViewModel(
     private val isSavedUnsplashPhotoUseCase: IsSavedUnsplashPhotoUseCase
 ) : ViewModel() {
 
-    private val isSavedUnsplashPhotoMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    val isSavedUnsplashPhotoLiveData: LiveData<Boolean>
-        get() = isSavedUnsplashPhotoMutableLiveData
-
-    private val isLoadingMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    val isLoadingLiveData: LiveData<Boolean>
-        get() = isLoadingMutableLiveData
+    private val isSavedUnsplashPhotoMutableFlow: MutableStateFlow<Result<Boolean>> = MutableStateFlow(Result.loading())
+    val isSavedUnsplashPhotoFlow: Flow<Result<Boolean>>
+        get() = isSavedUnsplashPhotoMutableFlow
 
     init {
         Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel ${this.toString()}")
@@ -43,15 +43,9 @@ class UnsplashPhotoDetailViewModel(
     }
 
     private fun isSavedUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailUi) {
-        isLoadingLiveData(true)
         viewModelScope.launch {
-            var isSaved: Boolean = isSavedUnsplashPhotoUseCase.execute(DetailUiToDetailDomainMapper.map(unsplashPhoto))
-            isSavedUnsplashPhotoMutableLiveData.value = isSaved
-            isLoadingLiveData(false)
+            var isSaved: Result<Boolean> = isSavedUnsplashPhotoUseCase.execute(DetailUiToDetailDomainMapper.map(unsplashPhoto))
+            isSavedUnsplashPhotoMutableFlow.value = isSaved
         }
-    }
-
-    private fun isLoadingLiveData(isLoading: Boolean) {
-        this.isLoadingMutableLiveData.value = isLoading
     }
 }

@@ -16,5 +16,9 @@ data class Result<out T>(
         fun <T> error(error: Exception? = null): Result<T> {
             return Result(ResultType.ERROR, error = error)
         }
+
+        fun <T> loading(): Result<T> {
+            return Result(ResultType.LOADING)
+        }
     }
 }

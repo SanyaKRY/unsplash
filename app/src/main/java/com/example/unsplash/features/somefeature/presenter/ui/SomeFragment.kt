@@ -7,7 +7,7 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +17,7 @@ import com.example.unsplash.features.somefeature.presenter.ui.recyclerview.Unspl
 import com.example.unsplash.features.somefeature.presenter.vm.UnsplashPhotoDatabaseViewModel
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -42,7 +43,7 @@ class SomeFragment : Fragment() {
 
         bindViews()
         setRecyclerView()
-        observerLiveData()
+        observerFlow()
         setItemTouchHelper()
         setHasOptionsMenu(true)
 
@@ -75,22 +76,26 @@ class SomeFragment : Fragment() {
 
     fun runQuery(query: String) {
         val searchQuery = "%$query%"
-        viewModel.searchDatabase(searchQuery).observe(viewLifecycleOwner, Observer { animals ->
-            unsplashPhotosUiAdapter.updateAdapter(animals)
-        })
+        lifecycleScope.launch {
+            viewModel.searchDatabase(searchQuery).collect {
+                unsplashPhotosUiAdapter.updateAdapter(it)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.action_sort_by_id -> viewModel.getUnsplashPhotosSortByIdDatabase.observe(viewLifecycleOwner, {
-                    unsplashPhotos ->
-                unsplashPhotosUiAdapter.updateAdapter(unsplashPhotos)
-            })
+            R.id.action_sort_by_id -> lifecycleScope.launch {
+                viewModel.getUnsplashPhotosSortByIdDatabase.collect {
+                    unsplashPhotosUiAdapter.updateAdapter(it)
+                }
+            }
             R.id.action_delete_all -> deleteAllItems()
-            R.id.action_sort -> viewModel.getUnsplashPhotosSortByIdDatabase.observe(viewLifecycleOwner, {
-                    unsplashPhotos ->
-                unsplashPhotosUiAdapter.updateAdapter(unsplashPhotos)
-            })
+            R.id.action_sort -> lifecycleScope.launch {
+                viewModel.getUnsplashPhotosSortByIdDatabase.collect {
+                    unsplashPhotosUiAdapter.updateAdapter(it)
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -118,8 +123,12 @@ class SomeFragment : Fragment() {
         }
     }
 
-    private fun observerLiveData() {
-        viewModel.getUnsplashPhotosDatabase.observe(viewLifecycleOwner, Observer(::onUnsplashPhotoReceived))
+    private fun observerFlow() {
+        lifecycleScope.launch {
+            viewModel.getUnsplashPhotosDatabase.collect {
+                onUnsplashPhotoReceived(it)
+            }
+        }
     }
 
     private fun onUnsplashPhotoReceived(listOfUnsplashPhotos: List<UnsplashPhotoDetailUi>) {

@@ -1,8 +1,6 @@
 package com.example.unsplash.features.somefeature.presenter.vm
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.unsplash.features.somefeature.domain.usecase.*
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
@@ -10,6 +8,8 @@ import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.Detail
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.DetailUiToDetailDomainMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class UnsplashPhotoDatabaseViewModel(
@@ -21,12 +21,11 @@ class UnsplashPhotoDatabaseViewModel(
     private val searchUnsplashPhotoDatabaseUseCase: SearchUnsplashPhotoDatabaseUseCase,
 ) : ViewModel() {
 
-    val getUnsplashPhotosDatabase: LiveData<List<UnsplashPhotoDetailUi>> =
-        convertDomainToUi(getListOfUnsplashPhotosDatabaseUseCase.execute())
-    val getUnsplashPhotosSortByIdDatabase: LiveData<List<UnsplashPhotoDetailUi>> =
-        convertDomainToUi(getListOfUnsplashPhotosSortByIdDatabaseUseCase.execute())
+    val getUnsplashPhotosDatabase: Flow<List<UnsplashPhotoDetailUi>> = convertDomainToUi(getListOfUnsplashPhotosDatabaseUseCase.execute())
 
-    fun convertDomainToUi(unsplashPhotos: LiveData<List<UnsplashPhotoDetailDomain>>): LiveData<List<UnsplashPhotoDetailUi>> {
+    val getUnsplashPhotosSortByIdDatabase: Flow<List<UnsplashPhotoDetailUi>> = convertDomainToUi(getListOfUnsplashPhotosSortByIdDatabaseUseCase.execute())
+
+    private fun convertDomainToUi(unsplashPhotos: Flow<List<UnsplashPhotoDetailDomain>>): Flow<List<UnsplashPhotoDetailUi>> {
         return unsplashPhotos.map { list: List<UnsplashPhotoDetailDomain> ->
             DetailDomainListToDetailUiListMapper.map(list)
         }
@@ -48,7 +47,7 @@ class UnsplashPhotoDatabaseViewModel(
         viewModelScope.launch(Dispatchers.IO) { deleteAllUnsplashPhotoDatabaseUseCase.execute() }
     }
 
-    fun searchDatabase(searchQuery: String): LiveData<List<UnsplashPhotoDetailUi>> {
+    fun searchDatabase(searchQuery: String): Flow<List<UnsplashPhotoDetailUi>> {
         return searchUnsplashPhotoDatabaseUseCase.execute(searchQuery)
             .map { list: List<UnsplashPhotoDetailDomain> ->
                 DetailDomainListToDetailUiListMapper.map(list)

@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -25,6 +26,9 @@ import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashP
 import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoLoadStateAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
 import com.example.unsplash.features.unsplashphotos.utils.startAnimation
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -72,7 +76,7 @@ class UnsplashPhotosFragment : Fragment() {
 
         bindViews()
         customizeRecyclerView()
-        observerLiveData()
+        observerFlow()
         setLoadStateListener()
 
         return view
@@ -152,9 +156,11 @@ class UnsplashPhotosFragment : Fragment() {
         }
     }
 
-    private fun observerLiveData() {
-        viewModel.unsplashPhotos.observe(viewLifecycleOwner) {
-            unsplashPhotoPagingAdapter.submitData(viewLifecycleOwner.lifecycle, it)
+    private fun observerFlow() {
+        lifecycleScope.launch {
+            viewModel.unsplashPhotos.collect {
+                unsplashPhotoPagingAdapter.submitData(it)
+            }
         }
     }
 

@@ -1,10 +1,10 @@
 package com.example.unsplash.features.unsplashphotodetail.data.datasource.database
 
-import androidx.lifecycle.LiveData
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.dao.UnsplashPhotoDao
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.model.UnsplashPhotoDatabase
 import com.example.unsplash.features.unsplashphotodetail.data.repository.mapper.DomainToDatabaseMapper
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
+import kotlinx.coroutines.flow.Flow
 
 class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) {
 
@@ -24,15 +24,15 @@ class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) 
         return unsplashPhotoDao.search(DomainToDatabaseMapper.map(unsplashPhoto).unsplashPhotoId)
     }
 
-    fun getAllUnsplashPhotos(): LiveData<List<UnsplashPhotoDatabase>> {
+    fun getAllUnsplashPhotos(): Flow<List<UnsplashPhotoDatabase>> {
         return unsplashPhotoDao.getAllUnsplashPhotos()
     }
 
-    fun getAllUnsplashPhotosSortById(): LiveData<List<UnsplashPhotoDatabase>> {
+    fun getAllUnsplashPhotosSortById(): Flow<List<UnsplashPhotoDatabase>> {
         return unsplashPhotoDao.getAllUnsplashPhotosSortById()
     }
 
-    fun searchUnsplashPhotoByQuery(searchQuery: String): LiveData<List<UnsplashPhotoDatabase>> {
+    fun searchUnsplashPhotoByQuery(searchQuery: String): Flow<List<UnsplashPhotoDatabase>> {
         return unsplashPhotoDao.searchByQuery(searchQuery)
     }
 }

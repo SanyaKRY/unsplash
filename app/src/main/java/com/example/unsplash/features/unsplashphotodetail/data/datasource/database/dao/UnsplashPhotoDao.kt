@@ -1,12 +1,11 @@
 package com.example.unsplash.features.unsplashphotodetail.data.datasource.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.OnConflictStrategy
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.model.UnsplashPhotoDatabase
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UnsplashPhotoDao {
@@ -24,11 +23,11 @@ interface UnsplashPhotoDao {
     suspend fun search(unsplashPhotoId: String): UnsplashPhotoDatabase
 
     @Query("SELECT * FROM unsplash_photo_table WHERE unsplashPhotoId like :searchQuery")
-    fun searchByQuery(searchQuery: String): LiveData<List<UnsplashPhotoDatabase>>
+    fun searchByQuery(searchQuery: String): Flow<List<UnsplashPhotoDatabase>>
 
     @Query("SELECT * FROM unsplash_photo_table")
-    fun getAllUnsplashPhotos(): LiveData<List<UnsplashPhotoDatabase>>
+    fun getAllUnsplashPhotos(): Flow<List<UnsplashPhotoDatabase>>
 
     @Query("SELECT * FROM unsplash_photo_table ORDER BY unsplashPhotoId ASC")
-    fun getAllUnsplashPhotosSortById(): LiveData<List<UnsplashPhotoDatabase>>
+    fun getAllUnsplashPhotosSortById(): Flow<List<UnsplashPhotoDatabase>>
 }

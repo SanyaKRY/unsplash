@@ -1,11 +1,11 @@
 package com.example.unsplash.features.somefeature.domain
 
-import androidx.lifecycle.LiveData
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
+import kotlinx.coroutines.flow.Flow
 
 interface UnsplashPhotosRepository {
 
-    fun getAllUnsplashPhotos(): LiveData<List<UnsplashPhotoDetailDomain>>
+    fun getAllUnsplashPhotos(): Flow<List<UnsplashPhotoDetailDomain>>
 
     suspend fun deleteAllUnsplashPhoto()
 
@@ -13,7 +13,7 @@ interface UnsplashPhotosRepository {
 
     suspend fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain)
 
-    fun getAllUnsplashPhotosSortById(): LiveData<List<UnsplashPhotoDetailDomain>>
+    fun getAllUnsplashPhotosSortById(): Flow<List<UnsplashPhotoDetailDomain>>
 
-    fun searchUnsplashPhoto(searchQuery: String): LiveData<List<UnsplashPhotoDetailDomain>>
+    fun searchUnsplashPhoto(searchQuery: String): Flow<List<UnsplashPhotoDetailDomain>>
 }
