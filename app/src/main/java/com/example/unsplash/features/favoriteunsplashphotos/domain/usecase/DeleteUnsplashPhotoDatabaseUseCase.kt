@@ -1,6 +1,6 @@
-package com.example.unsplash.features.somefeature.domain.usecase
+package com.example.unsplash.features.favoriteunsplashphotos.domain.usecase
 
-import com.example.unsplash.features.somefeature.domain.UnsplashPhotosRepository
+import com.example.unsplash.features.favoriteunsplashphotos.domain.UnsplashPhotosRepository
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
 
 class DeleteUnsplashPhotoDatabaseUseCase(private val repository: UnsplashPhotosRepository) {

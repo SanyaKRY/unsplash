@@ -1,4 +1,4 @@
-package com.example.unsplash.features.somefeature.presenter.ui
+package com.example.unsplash.features.favoriteunsplashphotos.presenter.ui
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -12,18 +12,20 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unsplash.R
-import com.example.unsplash.databinding.FragmentSomeBinding
-import com.example.unsplash.features.somefeature.presenter.ui.recyclerview.UnsplashPhotosUiAdapter
-import com.example.unsplash.features.somefeature.presenter.vm.UnsplashPhotoDatabaseViewModel
+import com.example.unsplash.core.datatype.Result
+import com.example.unsplash.core.datatype.ResultType
+import com.example.unsplash.databinding.FragmentFavoriteUnsplashPhotosBinding
+import com.example.unsplash.features.favoriteunsplashphotos.presenter.ui.recyclerview.UnsplashPhotosUiAdapter
+import com.example.unsplash.features.favoriteunsplashphotos.presenter.vm.UnsplashPhotoDatabaseViewModel
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SomeFragment : Fragment() {
+class FavoriteUnsplashPhotosFragment : Fragment() {
 
-    private var _binding: FragmentSomeBinding? = null
+    private var _binding: FragmentFavoriteUnsplashPhotosBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: UnsplashPhotoDatabaseViewModel by viewModel()
@@ -35,7 +37,7 @@ class SomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSomeBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoriteUnsplashPhotosBinding.inflate(inflater, container, false)
 
         context?.let {
             binding.root.setBackgroundColor(ContextCompat.getColor(it, R.color.purple))
@@ -76,8 +78,9 @@ class SomeFragment : Fragment() {
 
     fun runQuery(query: String) {
         val searchQuery = "%$query%"
+        viewModel.searchDatabase(searchQuery)
         lifecycleScope.launch {
-            viewModel.searchDatabase(searchQuery).collect {
+            viewModel.searchUnsplashPhotoFlow.collect {
                 unsplashPhotosUiAdapter.updateAdapter(it)
             }
         }
@@ -85,19 +88,27 @@ class SomeFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.action_sort_by_id -> lifecycleScope.launch {
-                viewModel.getUnsplashPhotosSortByIdDatabase.collect {
-                    unsplashPhotosUiAdapter.updateAdapter(it)
-                }
-            }
+            R.id.action_sort_by_id -> getUnsplashPhotosSortById()
             R.id.action_delete_all -> deleteAllItems()
-            R.id.action_sort -> lifecycleScope.launch {
-                viewModel.getUnsplashPhotosSortByIdDatabase.collect {
-                    unsplashPhotosUiAdapter.updateAdapter(it)
+            R.id.action_sort -> getUnsplashPhotosSortById()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun getUnsplashPhotosSortById() {
+        lifecycleScope.launch {
+            viewModel.getUnsplashPhotosSortByIdDatabaseFlow.collect { result: Result<List<UnsplashPhotoDetailUi>> ->
+                when (result.resultType) {
+                    ResultType.LOADING -> {
+                        // TODO
+                    }
+                    ResultType.SUCCESS -> {
+                        var list: List<UnsplashPhotoDetailUi> = result.data!!
+                        unsplashPhotosUiAdapter.updateAdapter(list)
+                    }
                 }
             }
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun deleteAllItems() {
@@ -125,8 +136,16 @@ class SomeFragment : Fragment() {
 
     private fun observerFlow() {
         lifecycleScope.launch {
-            viewModel.getUnsplashPhotosDatabase.collect {
-                onUnsplashPhotoReceived(it)
+            viewModel.getUnsplashPhotosDatabaseUnsplashPhotoFlow.collect { result: Result<List<UnsplashPhotoDetailUi>> ->
+                when (result.resultType) {
+                    ResultType.LOADING -> {
+                        // TODO
+                    }
+                    ResultType.SUCCESS -> {
+                        var list: List<UnsplashPhotoDetailUi> = result.data!!
+                        onUnsplashPhotoReceived(list)
+                    }
+                }
             }
         }
     }

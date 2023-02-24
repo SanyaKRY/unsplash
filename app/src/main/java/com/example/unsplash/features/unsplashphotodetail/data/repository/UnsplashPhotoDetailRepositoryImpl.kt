@@ -12,8 +12,8 @@ class UnsplashPhotoDetailRepositoryImpl(private val unsplashPhotoDBDataSource: U
         return unsplashPhotoDBDataSource.insertUnsplashPhoto(unsplashPhoto)
     }
 
-    override suspend fun deleteUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain) {
-        return unsplashPhotoDBDataSource.deleteUnsplashPhoto(unsplashPhoto)
+    override suspend fun deleteUnsplashtByIdPhoto(unsplashPhoto: UnsplashPhotoDetailDomain) {
+        return unsplashPhotoDBDataSource.deleteUnsplashPhotoByUnsplashPhotoId(unsplashPhoto)
     }
 
     override suspend fun searchUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): UnsplashPhotoDetailDomain? {
