@@ -17,6 +17,9 @@ interface UnsplashPhotoDao {
     @Delete
     suspend fun delete(unsplashPhoto: UnsplashPhotoDatabase)
 
+    @Query("DELETE FROM unsplash_photo_table WHERE unsplashPhotoId = :unsplashPhotoId")
+    suspend fun deleteByUnsplashPhotoId(unsplashPhotoId: String)
+
     @Query("DELETE FROM unsplash_photo_table")
     suspend fun deleteAll()
 

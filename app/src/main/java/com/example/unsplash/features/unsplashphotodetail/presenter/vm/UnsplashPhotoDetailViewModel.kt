@@ -2,7 +2,7 @@ package com.example.unsplash.features.unsplashphotodetail.presenter.vm
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.unsplash.features.unsplashphotodetail.domain.usecase.DeleteUnsplashPhotoUseCase
+import com.example.unsplash.features.unsplashphotodetail.domain.usecase.DeleteUnsplashPhotoByIdPhoyoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.InsertUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.IsSavedUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.DetailUiToDetailDomainMapper
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class UnsplashPhotoDetailViewModel(
     private val unsplashPhoto: UnsplashPhotoDetailUi,
     private val insertUnsplashPhotoUseCase: InsertUnsplashPhotoUseCase,
-    private val deleteUnsplashPhotoUseCase: DeleteUnsplashPhotoUseCase,
+    private val deleteUnsplashPhotoByIdPhoyoUseCase: DeleteUnsplashPhotoByIdPhoyoUseCase,
     private val isSavedUnsplashPhotoUseCase: IsSavedUnsplashPhotoUseCase
 ) : ViewModel() {
 
@@ -38,7 +38,7 @@ class UnsplashPhotoDetailViewModel(
 
     fun deleteUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailUi) {
         viewModelScope.launch {
-            deleteUnsplashPhotoUseCase.execute(DetailUiToDetailDomainMapper.map(unsplashPhoto))
+            deleteUnsplashPhotoByIdPhoyoUseCase.execute(DetailUiToDetailDomainMapper.map(unsplashPhoto))
         }
     }
 
