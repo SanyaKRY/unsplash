@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unsplash.R
+import com.example.unsplash.core.datatype.ResultType
 import com.example.unsplash.databinding.FragmentSomeBinding
 import com.example.unsplash.features.somefeature.presenter.ui.recyclerview.UnsplashPhotosUiAdapter
 import com.example.unsplash.features.somefeature.presenter.vm.UnsplashPhotoDatabaseViewModel
@@ -58,12 +59,13 @@ class SomeFragment : Fragment() {
 
         val searchView = searchItem.actionView as SearchView
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                Log.d("PetProject","onQueryTextSubmit")
+                Log.d("PetProject", "onQueryTextSubmit")
                 searchView.clearFocus()
                 return true
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     runQuery(newText)
@@ -75,32 +77,55 @@ class SomeFragment : Fragment() {
 
     fun runQuery(query: String) {
         val searchQuery = "%$query%"
-        viewModel.searchDatabase(searchQuery).observe(viewLifecycleOwner, Observer { animals ->
-            unsplashPhotosUiAdapter.updateAdapter(animals)
+        viewModel.searchDatabase(searchQuery).observe(viewLifecycleOwner, Observer { list ->
+            when (list.resultType) {
+                ResultType.LOADING -> {
+                    // TODO
+                }
+                ResultType.SUCCESS -> {
+                    var listUnsplashPhoto: List<UnsplashPhotoDetailUi> = list.data!!
+                    unsplashPhotosUiAdapter.updateAdapter(listUnsplashPhoto)
+                }
+                ResultType.ERROR -> {
+                    // TODO
+                }
+            }
         })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.action_sort_by_id -> viewModel.getUnsplashPhotosSortByIdDatabase.observe(viewLifecycleOwner, {
-                    unsplashPhotos ->
-                unsplashPhotosUiAdapter.updateAdapter(unsplashPhotos)
-            })
+        when (item.itemId) {
+            R.id.action_sort_by_id -> getUnsplashPhotosSortById()
             R.id.action_delete_all -> deleteAllItems()
-            R.id.action_sort -> viewModel.getUnsplashPhotosSortByIdDatabase.observe(viewLifecycleOwner, {
-                    unsplashPhotos ->
-                unsplashPhotosUiAdapter.updateAdapter(unsplashPhotos)
-            })
+            R.id.action_sort -> getUnsplashPhotosSortById()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun getUnsplashPhotosSortById() {
+        viewModel.getUnsplashPhotosSortByIdDatabase.observe(viewLifecycleOwner) { unsplashPhotos ->
+            when (unsplashPhotos.resultType) {
+                ResultType.LOADING -> {
+                    // TODO
+                }
+                ResultType.SUCCESS -> {
+                    var list: List<UnsplashPhotoDetailUi> = unsplashPhotos.data!!
+                    unsplashPhotosUiAdapter.updateAdapter(list)
+                }
+                ResultType.ERROR -> {
+                    // TODO
+                }
+            }
+
+        }
     }
 
     private fun deleteAllItems() {
         AlertDialog.Builder(requireContext())
             .setTitle("Delete All")
             .setMessage("Are you sure:?")
-            .setPositiveButton("Yes"){
-                    dialog, _ -> viewModel.deleteAll()
+            .setPositiveButton("Yes") { dialog, _ ->
+                viewModel.deleteAll()
                 dialog.dismiss()
             }.setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
@@ -119,7 +144,11 @@ class SomeFragment : Fragment() {
     }
 
     private fun observerLiveData() {
-        viewModel.getUnsplashPhotosDatabase.observe(viewLifecycleOwner, Observer(::onUnsplashPhotoReceived))
+        viewModel.getUnsplashPhotosDatabase.observe(viewLifecycleOwner, Observer {
+            if (it.resultType == ResultType.SUCCESS) {
+                onUnsplashPhotoReceived(it.data!!)
+            }
+        })
     }
 
     private fun onUnsplashPhotoReceived(listOfUnsplashPhotos: List<UnsplashPhotoDetailUi>) {
@@ -128,8 +157,10 @@ class SomeFragment : Fragment() {
     }
 
     private fun setItemTouchHelper() {
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -139,11 +170,12 @@ class SomeFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val unsplashPhoto = unsplashPhotosUiAdapter.getUnsplashPhotoByPosition(viewHolder.adapterPosition)
+                val unsplashPhoto =
+                    unsplashPhotosUiAdapter.getUnsplashPhotoByPosition(viewHolder.adapterPosition)
                 viewModel.delete(unsplashPhoto)
 
                 Snackbar.make(binding.root, "Deleted:!", Snackbar.LENGTH_SHORT).apply {
-                    setAction("Undo"){
+                    setAction("Undo") {
                         viewModel.insert(unsplashPhoto)
                     }
                     show()
