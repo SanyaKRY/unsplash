@@ -15,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -25,9 +26,15 @@ import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashP
 import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoLoadStateAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
 import com.example.unsplash.features.unsplashphotos.utils.startAnimation
+import io.reactivex.Observer
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
+import java.util.concurrent.Flow
 
 class UnsplashPhotosFragment : Fragment() {
 
@@ -37,6 +44,8 @@ class UnsplashPhotosFragment : Fragment() {
     private val viewModel: UnsplashPhotoViewModel by viewModel()
 
     private var recyclerView: RecyclerView? = null
+
+    private var disposable: CompositeDisposable? = null
 
     private val unsplashPhotoDetailListener: (
         unsplashPhotoUi: UnsplashPhotoUi, imageView: AppCompatImageView, textView: TextView
@@ -69,6 +78,10 @@ class UnsplashPhotosFragment : Fragment() {
     ): View? {
         _binding = FragmentUnsplashPhotosBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        // CompositeDisposable для хранения всех ваших подписок, и отписывание от них всех в onDestroy()
+        // или в onDestroyView()c помощью метода dispose()
+        disposable = CompositeDisposable()
 
         bindViews()
         customizeRecyclerView()
@@ -153,13 +166,35 @@ class UnsplashPhotosFragment : Fragment() {
     }
 
     private fun observerLiveData() {
-        viewModel.unsplashPhotos.observe(viewLifecycleOwner) {
-            unsplashPhotoPagingAdapter.submitData(viewLifecycleOwner.lifecycle, it)
-        }
+        // 1
+        viewModel.unsplashPhotos.subscribe(object : Observer<PagingData<UnsplashPhotoUi>> {
+            override fun onSubscribe(d: Disposable) {
+                Log.d("PetProject", "onSubscribe")
+            }
+
+            override fun onNext(t: PagingData<UnsplashPhotoUi>) {
+                Log.d("PetProject", "onNext")
+                unsplashPhotoPagingAdapter.submitData(lifecycle, t)
+            }
+
+            override fun onError(e: Throwable) {
+                Log.d("PetProject", "onError")
+            }
+
+            override fun onComplete() {
+                Log.d("PetProject", "onComplete")
+            }
+        })
+
+        // 2
+//        disposable?.add(viewModel.unsplashPhotos.subscribe { list ->
+//            unsplashPhotoPagingAdapter.submitData(lifecycle, list)
+//        })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        disposable?.dispose()
         _binding = null
     }
 }

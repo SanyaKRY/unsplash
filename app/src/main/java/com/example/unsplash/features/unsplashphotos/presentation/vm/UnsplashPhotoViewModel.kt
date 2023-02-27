@@ -2,18 +2,19 @@ package com.example.unsplash.features.unsplashphotos.presentation.vm
 
 import androidx.lifecycle.*
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import androidx.paging.map
+import androidx.paging.rxjava2.cachedIn
 import com.example.unsplash.features.unsplashphotos.domain.usecase.GetListOfUnsplashPhotosUseCase
 import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDomain
 import com.example.unsplash.features.unsplashphotos.presentation.mapper.PagingDomainToUiMapper
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
+import io.reactivex.Observable
 
 class UnsplashPhotoViewModel(
         private val getListOfUnsplashPhotosUseCase: GetListOfUnsplashPhotosUseCase
 ) : ViewModel() {
 
-    val unsplashPhotos: LiveData<PagingData<UnsplashPhotoUi>>
+    val unsplashPhotos: Observable<PagingData<UnsplashPhotoUi>>
 
     init {
         unsplashPhotos = getListOfUnsplashPhotosUseCase.execute().map { pagingData: PagingData<UnsplashPhotoDomain> ->
