@@ -2,56 +2,87 @@ package com.example.unsplash.features.unsplashphotodetail.presenter.vm
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.unsplash.features.unsplashphotodetail.domain.usecase.DeleteUnsplashPhotoUseCase
+import com.example.unsplash.features.unsplashphotodetail.domain.usecase.DeleteUnsplashPhotoByIdPhoyoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.InsertUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.IsSavedUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.DetailUiToDetailDomainMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
-import kotlinx.coroutines.launch
+import com.example.unsplash.core.datatype.Result
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class UnsplashPhotoDetailViewModel(
     private val unsplashPhoto: UnsplashPhotoDetailUi,
     private val insertUnsplashPhotoUseCase: InsertUnsplashPhotoUseCase,
-    private val deleteUnsplashPhotoUseCase: DeleteUnsplashPhotoUseCase,
+    private val deleteUnsplashPhotoByidPhotoUseCase: DeleteUnsplashPhotoByIdPhoyoUseCase,
     private val isSavedUnsplashPhotoUseCase: IsSavedUnsplashPhotoUseCase
 ) : ViewModel() {
 
-    private val isSavedUnsplashPhotoMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    val isSavedUnsplashPhotoLiveData: LiveData<Boolean>
+    private val isSavedUnsplashPhotoMutableLiveData: MutableLiveData<Result<Boolean>> = MutableLiveData(Result.loading())
+    val isSavedUnsplashPhotoLiveData: LiveData<Result<Boolean>>
         get() = isSavedUnsplashPhotoMutableLiveData
-
-    private val isLoadingMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    val isLoadingLiveData: LiveData<Boolean>
-        get() = isLoadingMutableLiveData
 
     init {
         Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel ${this.toString()}")
-        Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel unsplashPhoto ${unsplashPhoto.unsplashPhotoId}")
+        Log.d(
+            "UnsplashPhotoLog",
+            "init UnsplashPhotoDetailViewModel unsplashPhoto ${unsplashPhoto.unsplashPhotoId}"
+        )
         isSavedUnsplashPhoto(unsplashPhoto)
     }
 
     fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailUi) {
-        viewModelScope.launch {
-            insertUnsplashPhotoUseCase.execute(DetailUiToDetailDomainMapper.map(unsplashPhoto))
-        }
+        Log.d("PetProject", "fun insertUnsplashPhoto")
+        insertUnsplashPhotoUseCase
+            .execute(DetailUiToDetailDomainMapper.map(unsplashPhoto))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { // onComplete
+                    Log.d("PetProject", "Completed insertUnsplashPhoto")
+                },
+                { // onError
+                        error ->
+                    Log.d("PetProject", "Error insertUnsplashPhoto $error")
+                }
+            )
     }
 
     fun deleteUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailUi) {
-        viewModelScope.launch {
-            deleteUnsplashPhotoUseCase.execute(DetailUiToDetailDomainMapper.map(unsplashPhoto))
-        }
+        Log.d("PetProject", "fun delete")
+        deleteUnsplashPhotoByidPhotoUseCase
+            .execute(DetailUiToDetailDomainMapper.map(unsplashPhoto))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { // onComplete
+                    Log.d("PetProject", "Completed deleteUnsplashPhoto")
+                },
+                { // onError
+                        error ->
+                    Log.d("PetProject", "Error deleteUnsplashPhoto $error")
+                }
+            )
     }
 
     private fun isSavedUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailUi) {
-        isLoadingLiveData(true)
-        viewModelScope.launch {
-            var isSaved: Boolean = isSavedUnsplashPhotoUseCase.execute(DetailUiToDetailDomainMapper.map(unsplashPhoto))
-            isSavedUnsplashPhotoMutableLiveData.value = isSaved
-            isLoadingLiveData(false)
-        }
-    }
-
-    private fun isLoadingLiveData(isLoading: Boolean) {
-        this.isLoadingMutableLiveData.value = isLoading
+        isSavedUnsplashPhotoUseCase.execute(DetailUiToDetailDomainMapper.map(unsplashPhoto))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { // onSuccess
+                        value ->
+                    Log.d("PetProject", "isSavedUnsplashPhoto Success $value")
+                    isSavedUnsplashPhotoMutableLiveData.value = value
+                },
+                { // onError
+                        error ->
+                    Log.d("PetProject", "isSavedUnsplashPhoto Error $error")
+                },
+                { // onComplete
+                    Log.d("PetProject", "isSavedUnsplashPhoto Completed")
+                    isSavedUnsplashPhotoMutableLiveData.value = Result.success(false)
+                }
+            )
     }
 }

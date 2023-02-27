@@ -1,34 +1,38 @@
 package com.example.unsplash.features.unsplashphotodetail.data.datasource.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.OnConflictStrategy
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.model.UnsplashPhotoDatabase
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
 
 @Dao
 interface UnsplashPhotoDao {
 
     @Insert
-    suspend fun insert(unsplashPhoto: UnsplashPhotoDatabase)
+    fun insert(unsplashPhoto: UnsplashPhotoDatabase): Completable
 
     @Delete
-    suspend fun delete(unsplashPhoto: UnsplashPhotoDatabase)
+    fun delete(unsplashPhoto: UnsplashPhotoDatabase): Completable
+
+    @Query("DELETE FROM unsplash_photo_table WHERE unsplashPhotoId = :unsplashPhotoId")
+    fun deleteByUnsplashPhotoId(unsplashPhotoId: String): Completable
 
     @Query("DELETE FROM unsplash_photo_table")
-    suspend fun deleteAll()
+    fun deleteAll(): Completable
 
     @Query("SELECT * FROM unsplash_photo_table WHERE unsplashPhotoId = :unsplashPhotoId")
-    suspend fun search(unsplashPhotoId: String): UnsplashPhotoDatabase
+    fun search(unsplashPhotoId: String): Maybe<UnsplashPhotoDatabase>
 
     @Query("SELECT * FROM unsplash_photo_table WHERE unsplashPhotoId like :searchQuery")
-    fun searchByQuery(searchQuery: String): LiveData<List<UnsplashPhotoDatabase>>
+    fun searchByQuery(searchQuery: String): Flowable<List<UnsplashPhotoDatabase>>
 
     @Query("SELECT * FROM unsplash_photo_table")
-    fun getAllUnsplashPhotos(): LiveData<List<UnsplashPhotoDatabase>>
+    fun getAllUnsplashPhotos(): Flowable<List<UnsplashPhotoDatabase>>
 
     @Query("SELECT * FROM unsplash_photo_table ORDER BY unsplashPhotoId ASC")
-    fun getAllUnsplashPhotosSortById(): LiveData<List<UnsplashPhotoDatabase>>
+    fun getAllUnsplashPhotosSortById(): Flowable<List<UnsplashPhotoDatabase>>
 }

@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.view.ViewPropertyAnimator
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -24,6 +26,8 @@ import com.example.unsplash.databinding.FragmentUnsplashPhotoDetailBinding
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.UiToDetailUiMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import com.example.unsplash.features.unsplashphotodetail.presenter.vm.UnsplashPhotoDetailViewModel
+import com.example.unsplash.core.datatype.Result
+import com.example.unsplash.core.datatype.ResultType
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -172,10 +176,17 @@ class UnsplashPhotoDetailFragment : Fragment() {
         )
     }
 
-    private fun isSavedUnsplashPhoto(isSaved: Boolean) {
-        unsplashPhoto.isSaved = isSaved
-        // animation
-        populateFavoriteIconView(isSaved)
+    private fun isSavedUnsplashPhoto(result: Result<Boolean>) {
+        when (result.resultType) {
+            ResultType.LOADING -> {
+                binding.insertDeleteImageView.isVisible = false
+            }
+            ResultType.SUCCESS -> {
+                binding.insertDeleteImageView.isVisible = true
+                unsplashPhoto.isSaved = result.data
+                populateFavoriteIconView(result.data!!)
+            }
+        }
     }
 
     private fun bindViews() {

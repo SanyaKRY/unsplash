@@ -2,10 +2,10 @@ package com.example.unsplash.features.di
 
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import com.example.unsplash.features.somefeature.domain.usecase.*
-import com.example.unsplash.features.somefeature.presenter.ui.recyclerview.UnsplashPhotosUiAdapter
-import com.example.unsplash.features.somefeature.presenter.vm.UnsplashPhotoDatabaseViewModel
-import com.example.unsplash.features.unsplashphotodetail.domain.usecase.DeleteUnsplashPhotoUseCase
+import com.example.unsplash.features.favoriteunsplashphotos.domain.usecase.*
+import com.example.unsplash.features.favoriteunsplashphotos.presenter.ui.recyclerview.UnsplashPhotosUiAdapter
+import com.example.unsplash.features.favoriteunsplashphotos.presenter.vm.UnsplashPhotoDatabaseViewModel
+import com.example.unsplash.features.unsplashphotodetail.domain.usecase.DeleteUnsplashPhotoByIdPhoyoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.InsertUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.IsSavedUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
@@ -26,14 +26,14 @@ val featureModule = module {
         )
     }
     factory { InsertUnsplashPhotoUseCase(repository = get()) }
-    factory { DeleteUnsplashPhotoUseCase(repository = get()) }
+    factory { DeleteUnsplashPhotoByIdPhoyoUseCase(repository = get()) }
     factory { IsSavedUnsplashPhotoUseCase(repository = get()) }
     viewModel {
         (unsplashPhotoDetailUi: UnsplashPhotoDetailUi) ->
         UnsplashPhotoDetailViewModel(
             unsplashPhoto = unsplashPhotoDetailUi,
             insertUnsplashPhotoUseCase = get(),
-            deleteUnsplashPhotoUseCase = get(),
+            deleteUnsplashPhotoByidPhotoUseCase = get(),
             isSavedUnsplashPhotoUseCase = get()
         )
     }
@@ -47,6 +47,7 @@ val featureModule = module {
                   unsplashPhotoAndUserDetailsListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit) ->
         UnsplashPhotosAdapter(unsplashPhotoDetailListener = unsplashPhotoDetailListener,
             unsplashPhotoAndUserDetailsListener = unsplashPhotoAndUserDetailsListener) }
+
     factory { GetListOfUnsplashPhotosDatabaseUseCase(repository = get()) }
     factory { DeleteAllUnsplashPhotoDatabaseUseCase(repository = get()) }
     factory { DeleteUnsplashPhotoDatabaseUseCase(repository = get()) }

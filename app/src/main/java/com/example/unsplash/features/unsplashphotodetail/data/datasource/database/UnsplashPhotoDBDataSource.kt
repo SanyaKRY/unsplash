@@ -7,76 +7,61 @@ import com.example.unsplash.features.unsplashphotodetail.data.datasource.databas
 import com.example.unsplash.features.unsplashphotodetail.data.repository.mapper.DomainToDatabaseMapper
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
 import com.example.unsplash.core.datatype.Result
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
 
 class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) {
 
-    suspend fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain) {
+    fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): Completable {
         return unsplashPhotoDao.insert(DomainToDatabaseMapper.map(unsplashPhoto))
     }
 
-    suspend fun deleteUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain) {
+    fun deleteUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): Completable {
         return unsplashPhotoDao.delete(DomainToDatabaseMapper.map(unsplashPhoto))
     }
 
-    suspend fun deleteAllUnsplashPhoto() {
+    fun deleteUnsplashPhotoByUnsplashPhotoId(unsplashPhoto: UnsplashPhotoDetailDomain): Completable {
+        return unsplashPhotoDao.deleteByUnsplashPhotoId(DomainToDatabaseMapper.map(unsplashPhoto).unsplashPhotoId)
+    }
+
+    fun deleteAllUnsplashPhoto(): Completable {
         return unsplashPhotoDao.deleteAll()
     }
 
-    suspend fun searchUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): UnsplashPhotoDatabase {
+    fun searchUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): Maybe<Result<UnsplashPhotoDatabase>> {
         return unsplashPhotoDao.search(DomainToDatabaseMapper.map(unsplashPhoto).unsplashPhotoId)
+            .map {
+                Result.success(it)
+            }.onErrorReturn {
+                Result.error(it as Exception)
+            }
     }
 
-    fun getAllUnsplashPhotos(): LiveData<Result<List<UnsplashPhotoDatabase>>> {
-        var result = MediatorLiveData<Result<List<UnsplashPhotoDatabase>>>()
-        result.value = Result.loading()
-        try {
-            var source: LiveData<List<UnsplashPhotoDatabase>> = unsplashPhotoDao.getAllUnsplashPhotos()
-            result.addSource(source) { list: List<UnsplashPhotoDatabase> ->
-                if (list.isNotEmpty()) {
-                    result.value = Result.success(list)
-                } else {
-                    result.value = Result.error(Exception())
-                }
+    fun getAllUnsplashPhotos(): Flowable<Result<List<UnsplashPhotoDatabase>>> {
+        return unsplashPhotoDao.getAllUnsplashPhotos()
+            .map {
+                Result.success(it)
+            }.onErrorReturn {
+                Result.error(it as Exception)
             }
-        } catch (ex: Exception) {
-            result.value = Result.error(Exception(ex))
-        }
-        return result
     }
 
-    fun getAllUnsplashPhotosSortById(): LiveData<Result<List<UnsplashPhotoDatabase>>> {
-        var result = MediatorLiveData<Result<List<UnsplashPhotoDatabase>>>()
-        result.value = Result.loading()
-        try {
-            var source: LiveData<List<UnsplashPhotoDatabase>> = unsplashPhotoDao.getAllUnsplashPhotosSortById()
-            result.addSource(source) { list: List<UnsplashPhotoDatabase> ->
-                if (list.isNotEmpty()) {
-                    result.value = Result.success(list)
-                } else {
-                    result.value = Result.error(Exception())
-                }
+    fun getAllUnsplashPhotosSortById(): Flowable<Result<List<UnsplashPhotoDatabase>>> {
+        return unsplashPhotoDao.getAllUnsplashPhotosSortById()
+            .map {
+                Result.success(it)
+            }.onErrorReturn {
+                Result.error(it as Exception)
             }
-        } catch (ex: Exception) {
-            result.value = Result.error(Exception(ex))
-        }
-        return result
     }
 
-    fun searchUnsplashPhotoByQuery(searchQuery: String): LiveData<Result<List<UnsplashPhotoDatabase>>> {
-        var result = MediatorLiveData<Result<List<UnsplashPhotoDatabase>>>()
-        result.value = Result.loading()
-        try {
-            var source: LiveData<List<UnsplashPhotoDatabase>> = unsplashPhotoDao.searchByQuery(searchQuery)
-            result.addSource(source) { list: List<UnsplashPhotoDatabase> ->
-                if (list.isNotEmpty()) {
-                    result.value = Result.success(list)
-                } else {
-                    result.value = Result.error(Exception())
-                }
+    fun searchUnsplashPhotoByQuery(searchQuery: String): Flowable<Result<List<UnsplashPhotoDatabase>>> {
+        return unsplashPhotoDao.searchByQuery(searchQuery)
+            .map {
+                Result.success(it)
+            }.onErrorReturn {
+                Result.error(it as Exception)
             }
-        } catch (ex: Exception) {
-            result.value = Result.error(Exception(ex))
-        }
-        return result
     }
 }

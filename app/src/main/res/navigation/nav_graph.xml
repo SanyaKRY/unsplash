@@ -21,8 +21,8 @@
             app:popEnterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_left" />
         <action
-            android:id="@+id/action_unsplashPhotosFragment_to_someFragment"
-            app:destination="@id/someFragment" />
+            android:id="@+id/action_unsplashPhotosFragment_to_favoriteUnsplashPhotosFragment"
+            app:destination="@id/favoriteUnsplashPhotosFragment" />
     </fragment>
     <fragment
         android:id="@+id/unsplashPhotoDetailFragment"
@@ -52,12 +52,12 @@
             app:argType="com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi" />
     </fragment>
     <fragment
-        android:id="@+id/someFragment"
-        android:name="com.example.unsplash.features.somefeature.presenter.ui.SomeFragment"
-        android:label="fragment_some"
-        tools:layout="@layout/fragment_some" >
+        android:id="@+id/favoriteUnsplashPhotosFragment"
+        android:name="com.example.unsplash.features.favoriteunsplashphotos.presenter.ui.FavoriteUnsplashPhotosFragment"
+        android:label="fragment_favorite_unsplash_photos"
+        tools:layout="@layout/fragment_favorite_unsplash_photos" >
         <action
-            android:id="@+id/action_someFragment_to_unsplashPhotosFragment"
+            android:id="@+id/action_favoriteUnsplashPhotosFragment_to_unsplashPhotosFragment"
             app:destination="@id/unsplashPhotosFragment" />
     </fragment>
 </navigation>

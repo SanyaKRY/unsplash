@@ -1,13 +1,13 @@
-package com.example.unsplash.features.somefeature.domain.usecase
+package com.example.unsplash.features.favoriteunsplashphotos.domain.usecase
 
-import androidx.lifecycle.LiveData
 import com.example.unsplash.core.datatype.Result
-import com.example.unsplash.features.somefeature.domain.UnsplashPhotosRepository
+import com.example.unsplash.features.favoriteunsplashphotos.domain.UnsplashPhotosRepository
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
+import io.reactivex.rxjava3.core.Flowable
 
 class GetListOfUnsplashPhotosDatabaseUseCase(private val repository: UnsplashPhotosRepository) {
 
-    fun execute(): LiveData<Result<List<UnsplashPhotoDetailDomain>>> {
+    fun execute(): Flowable<Result<List<UnsplashPhotoDetailDomain>>> {
         return repository.getAllUnsplashPhotos()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.unsplash.features.somefeature.presenter.ui.recyclerview
+package com.example.unsplash.features.favoriteunsplashphotos.presenter.ui.recyclerview
 
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView

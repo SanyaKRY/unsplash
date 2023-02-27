@@ -137,7 +137,7 @@ class UnsplashPhotosFragment : Fragment() {
             binding.floatingActionButton.isVisible = false
             binding.circle.isVisible = true
             binding.circle.startAnimation(animation) {
-                val action = UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToSomeFragment()
+                val action = UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToFavoriteUnsplashPhotosFragment()
                 findNavController().navigate(action)
                 context?.let {
                     binding.root.setBackgroundColor(ContextCompat.getColor(it, R.color.purple_200))
