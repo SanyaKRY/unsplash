@@ -11,11 +11,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unsplash.R
-import com.example.unsplash.core.datatype.ResultType
 import com.example.unsplash.databinding.FragmentFavoriteUnsplashPhotosBinding
 import com.example.unsplash.features.favoriteunsplashphotos.presenter.ui.recyclerview.UnsplashPhotosUiAdapter
 import com.example.unsplash.features.favoriteunsplashphotos.presenter.vm.UnsplashPhotoDatabaseViewModel
-import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -93,18 +91,7 @@ class FavoriteUnsplashPhotosFragment : Fragment() {
 
     private fun getUnsplashPhotosSortById() {
         viewModel.getUnsplashPhotosSortByIdDatabaseLiveData.observe(viewLifecycleOwner) { unsplashPhotos ->
-            when (unsplashPhotos.resultType) {
-                ResultType.LOADING -> {
-                    // TODO
-                }
-                ResultType.SUCCESS -> {
-                    var list: List<UnsplashPhotoDetailUi> = unsplashPhotos.data!!
-                    unsplashPhotosUiAdapter.updateAdapter(list)
-                }
-                ResultType.ERROR -> {
-                    // TODO
-                }
-            }
+            unsplashPhotosUiAdapter.updateAdapter(unsplashPhotos)
         }
     }
 
@@ -133,18 +120,10 @@ class FavoriteUnsplashPhotosFragment : Fragment() {
 
     private fun observerLiveData() {
         viewModel.getUnsplashPhotosDatabaseUnsplashPhotoLiveData.observe(viewLifecycleOwner) { unsplashPhotos ->
-            when (unsplashPhotos.resultType) {
-                ResultType.LOADING -> {
-                    // TODO
-                }
-                ResultType.SUCCESS -> {
-                    var list: List<UnsplashPhotoDetailUi> = unsplashPhotos.data!!
-                    unsplashPhotosUiAdapter.updateAdapter(list)
-                }
-                ResultType.ERROR -> {
-                    // TODO
-                }
-            }
+            unsplashPhotosUiAdapter.updateAdapter(unsplashPhotos)
+        }
+        viewModel.isLoadingLiveData.observe(viewLifecycleOwner) { isLoading ->
+            binding.spinner.root.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 

@@ -1,12 +1,9 @@
 package com.example.unsplash.features.unsplashphotodetail.data.datasource.database
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.dao.UnsplashPhotoDao
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.model.UnsplashPhotoDatabase
 import com.example.unsplash.features.unsplashphotodetail.data.repository.mapper.DomainToDatabaseMapper
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
-import com.example.unsplash.core.datatype.Result
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
@@ -29,39 +26,19 @@ class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) 
         return unsplashPhotoDao.deleteAll()
     }
 
-    fun searchUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): Maybe<Result<UnsplashPhotoDatabase>> {
+    fun searchUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): Maybe<UnsplashPhotoDatabase> {
         return unsplashPhotoDao.search(DomainToDatabaseMapper.map(unsplashPhoto).unsplashPhotoId)
-            .map {
-                Result.success(it)
-            }.onErrorReturn {
-                Result.error(it as Exception)
-            }
     }
 
-    fun getAllUnsplashPhotos(): Flowable<Result<List<UnsplashPhotoDatabase>>> {
+    fun getAllUnsplashPhotos(): Flowable<List<UnsplashPhotoDatabase>> {
         return unsplashPhotoDao.getAllUnsplashPhotos()
-            .map {
-                Result.success(it)
-            }.onErrorReturn {
-                Result.error(it as Exception)
-            }
     }
 
-    fun getAllUnsplashPhotosSortById(): Flowable<Result<List<UnsplashPhotoDatabase>>> {
+    fun getAllUnsplashPhotosSortById(): Flowable<List<UnsplashPhotoDatabase>> {
         return unsplashPhotoDao.getAllUnsplashPhotosSortById()
-            .map {
-                Result.success(it)
-            }.onErrorReturn {
-                Result.error(it as Exception)
-            }
     }
 
-    fun searchUnsplashPhotoByQuery(searchQuery: String): Flowable<Result<List<UnsplashPhotoDatabase>>> {
+    fun searchUnsplashPhotoByQuery(searchQuery: String): Flowable<List<UnsplashPhotoDatabase>> {
         return unsplashPhotoDao.searchByQuery(searchQuery)
-            .map {
-                Result.success(it)
-            }.onErrorReturn {
-                Result.error(it as Exception)
-            }
     }
 }

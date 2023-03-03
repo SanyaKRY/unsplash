@@ -7,7 +7,6 @@ import com.example.unsplash.features.unsplashphotodetail.domain.usecase.InsertUn
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.IsSavedUnsplashPhotoUseCase
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.DetailUiToDetailDomainMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
-import com.example.unsplash.core.datatype.Result
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -18,8 +17,8 @@ class UnsplashPhotoDetailViewModel(
     private val isSavedUnsplashPhotoUseCase: IsSavedUnsplashPhotoUseCase
 ) : ViewModel() {
 
-    private val isSavedUnsplashPhotoMutableLiveData: MutableLiveData<Result<Boolean>> = MutableLiveData(Result.loading())
-    val isSavedUnsplashPhotoLiveData: LiveData<Result<Boolean>>
+    private val isSavedUnsplashPhotoMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    val isSavedUnsplashPhotoLiveData: LiveData<Boolean>
         get() = isSavedUnsplashPhotoMutableLiveData
 
     init {
@@ -81,7 +80,7 @@ class UnsplashPhotoDetailViewModel(
                 },
                 { // onComplete
                     Log.d("PetProject", "isSavedUnsplashPhoto Completed")
-                    isSavedUnsplashPhotoMutableLiveData.value = Result.success(false)
+                    isSavedUnsplashPhotoMutableLiveData.value = false
                 }
             )
     }

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/unsplashPhotosFragment"
         android:name="com.example.unsplash.features.unsplashphotos.presentation.ui.UnsplashPhotosFragment"
-        android:label="fragment_unsplash_photos"
+        android:label="Unsplash photos"
         tools:layout="@layout/fragment_unsplash_photos" >
         <action
             android:id="@+id/action_unsplashPhotosFragment_to_unsplashPhotoDetailFragment"
@@ -27,7 +27,7 @@
     <fragment
         android:id="@+id/unsplashPhotoDetailFragment"
         android:name="com.example.unsplash.features.unsplashphotodetail.presenter.ui.UnsplashPhotoDetailFragment"
-        android:label="fragment_unsplash_photo_detail"
+        android:label="Photo detail"
         tools:layout="@layout/fragment_unsplash_photo_detail" >
         <action
             android:id="@+id/action_unsplashPhotoDetailFragment_to_unsplashPhotosFragment"
@@ -39,7 +39,7 @@
     <fragment
         android:id="@+id/unsplashPhotoAndUserDetailsFragment"
         android:name="com.example.unsplash.features.unsplashphotoanduserdetails.presenter.ui.UnsplashPhotoAndUserDetailsFragment"
-        android:label="fragment_unsplash_photo_and_user_details"
+        android:label="Photo and user details"
         tools:layout="@layout/fragment_unsplash_photo_and_user_details" >
         <action
             android:id="@+id/action_unsplashPhotoAndUserDetailsFragment_to_unsplashPhotosFragment"
@@ -54,7 +54,7 @@
     <fragment
         android:id="@+id/favoriteUnsplashPhotosFragment"
         android:name="com.example.unsplash.features.favoriteunsplashphotos.presenter.ui.FavoriteUnsplashPhotosFragment"
-        android:label="fragment_favorite_unsplash_photos"
+        android:label="Favorite photos"
         tools:layout="@layout/fragment_favorite_unsplash_photos" >
         <action
             android:id="@+id/action_favoriteUnsplashPhotosFragment_to_unsplashPhotosFragment"
