@@ -10,8 +10,9 @@ import com.example.unsplash.core.datatype.Result
 import kotlinx.coroutines.flow.flow
 import java.lang.Error
 import java.lang.Exception
+import javax.inject.Inject
 
-class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) {
+class UnsplashPhotoDBDataSource @Inject constructor(private val unsplashPhotoDao: UnsplashPhotoDao) {
 
     suspend fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain) {
         return unsplashPhotoDao.insert(DomainToDatabaseMapper.map(unsplashPhoto))

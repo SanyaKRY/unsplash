@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,7 @@ import android.view.ViewPropertyAnimator
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -27,16 +27,14 @@ import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.UiToDe
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import com.example.unsplash.features.unsplashphotodetail.presenter.vm.UnsplashPhotoDetailViewModel
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import com.example.unsplash.core.datatype.Result
 import com.example.unsplash.core.datatype.ResultType
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UnsplashPhotoDetailFragment : Fragment() {
 
-    private val viewModel: UnsplashPhotoDetailViewModel by viewModel() {
-        parametersOf(UiToDetailUiMapper.map(args.unsplashPhoto))
-    }
+    private val viewModel: UnsplashPhotoDetailViewModel by viewModels()
 
     private var _binding: FragmentUnsplashPhotoDetailBinding? = null
     private val binding get() = _binding!!

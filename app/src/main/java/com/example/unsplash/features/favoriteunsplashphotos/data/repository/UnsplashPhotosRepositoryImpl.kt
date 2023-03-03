@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.Flow
 import com.example.unsplash.core.datatype.Result
 import com.example.unsplash.core.datatype.ResultType
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UnsplashPhotosRepositoryImpl(
+@Singleton
+class UnsplashPhotosRepositoryImpl @Inject constructor(
     private val unsplashPhotoDBDataSource: UnsplashPhotoDBDataSource
 ) : UnsplashPhotosRepository {
 

@@ -10,10 +10,13 @@ import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDo
 import com.example.unsplash.features.unsplashphotos.data.paging.UncplashPhotoPagingSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
 const val MAX_RESULTS_PER_PAGE: Int = 10
 
-class UnsplashPhotoRepositoryImpl(
+@Singleton
+class UnsplashPhotoRepositoryImpl @Inject constructor(
     private val unsplashPhotoNetworkDataSource: UnsplashPhotoNetworkDataSource
 ) : UnsplashPhotoRepository {
 

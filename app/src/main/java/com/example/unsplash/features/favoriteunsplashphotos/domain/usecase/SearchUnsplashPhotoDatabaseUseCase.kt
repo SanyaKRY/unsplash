@@ -4,8 +4,9 @@ import com.example.unsplash.features.favoriteunsplashphotos.domain.UnsplashPhoto
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
 import kotlinx.coroutines.flow.Flow
 import com.example.unsplash.core.datatype.Result
+import javax.inject.Inject
 
-class SearchUnsplashPhotoDatabaseUseCase(private val repository: UnsplashPhotosRepository) {
+class SearchUnsplashPhotoDatabaseUseCase @Inject constructor(private val repository: UnsplashPhotosRepository) {
 
     fun execute(searchQuery: String): Flow<Result<List<UnsplashPhotoDetailDomain>>> {
         return repository.searchUnsplashPhoto(searchQuery)

@@ -11,12 +11,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unsplash.databinding.UnsplashPhotoItemBinding
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-class UnsplashPhotoPagingAdapter(
-    private val unsplashPhotoDetailListener: (
+class UnsplashPhotoPagingAdapter @AssistedInject constructor (
+    @Assisted private val unsplashPhotoDetailListener: (
         unsplashPhotoUi: UnsplashPhotoUi, imageView: AppCompatImageView, textView: TextView
     ) -> Unit,
-    private val unsplashPhotoAndUserDetailsListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit
+    @Assisted private val unsplashPhotoAndUserDetailsListener: (unsplashPhotoUi: UnsplashPhotoUi) -> Unit
 ) : PagingDataAdapter<UnsplashPhotoUi, UnsplashPhotosViewHolder>(ModelComparatorDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UnsplashPhotosViewHolder {

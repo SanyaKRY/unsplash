@@ -10,12 +10,15 @@ import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPh
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.DetailDomainListToDetailUiListMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.DetailUiToDetailDomainMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UnsplashPhotoDatabaseViewModel(
+@HiltViewModel
+class UnsplashPhotoDatabaseViewModel @Inject constructor(
     private val getListOfUnsplashPhotosDatabaseUseCase: GetListOfUnsplashPhotosDatabaseUseCase,
     private val deleteAllUnsplashPhotoDatabaseUseCase: DeleteAllUnsplashPhotoDatabaseUseCase,
     private val deleteUnsplashPhotoDatabaseUseCase: DeleteUnsplashPhotoDatabaseUseCase,
