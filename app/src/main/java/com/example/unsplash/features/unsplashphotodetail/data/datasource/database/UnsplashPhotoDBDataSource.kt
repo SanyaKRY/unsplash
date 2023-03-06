@@ -7,8 +7,9 @@ import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPh
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
+import javax.inject.Inject
 
-class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) {
+class UnsplashPhotoDBDataSource @Inject constructor(private val unsplashPhotoDao: UnsplashPhotoDao) {
 
     fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): Completable {
         return unsplashPhotoDao.insert(DomainToDatabaseMapper.map(unsplashPhoto))

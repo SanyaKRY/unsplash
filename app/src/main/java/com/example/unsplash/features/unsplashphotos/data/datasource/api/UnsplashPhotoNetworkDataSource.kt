@@ -4,8 +4,9 @@ import android.util.Log
 import com.example.unsplash.features.unsplashphotos.data.datasource.api.retrofit.UnsplashPhotoApiService
 import com.example.unsplash.features.unsplashphotos.data.datasource.api.model.UnsplashPhotoApi
 import io.reactivex.Single
+import javax.inject.Inject
 
-class UnsplashPhotoNetworkDataSource(private val unsplashPhotoApiService: UnsplashPhotoApiService) {
+class UnsplashPhotoNetworkDataSource @Inject constructor(private val unsplashPhotoApiService: UnsplashPhotoApiService) {
 
     fun getListOfUnsplashPhotos(currentPage: Int, perPage: Int): Single<List<UnsplashPhotoApi>?> {
         Log.d("PetProject", "class UnsplashPhotoNetworkDataSource, currentPage: $currentPage, perPage: $perPage")

@@ -6,8 +6,11 @@ import com.example.unsplash.features.unsplashphotodetail.domain.UnsplashPhotoDet
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Maybe
+import javax.inject.Inject
 
-class UnsplashPhotoDetailRepositoryImpl(private val unsplashPhotoDBDataSource: UnsplashPhotoDBDataSource) : UnsplashPhotoDetailRepository {
+class UnsplashPhotoDetailRepositoryImpl @Inject constructor(
+    private val unsplashPhotoDBDataSource: UnsplashPhotoDBDataSource
+) : UnsplashPhotoDetailRepository {
 
     override fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): Completable {
         return unsplashPhotoDBDataSource.insertUnsplashPhoto(unsplashPhoto)

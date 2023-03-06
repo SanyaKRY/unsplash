@@ -9,8 +9,9 @@ import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.Detail
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Inject
 
-class UnsplashPhotoDetailViewModel(
+class UnsplashPhotoDetailViewModel @Inject constructor(
     private val unsplashPhoto: UnsplashPhotoDetailUi,
     private val insertUnsplashPhotoUseCase: InsertUnsplashPhotoUseCase,
     private val deleteUnsplashPhotoByidPhotoUseCase: DeleteUnsplashPhotoByIdPhoyoUseCase,

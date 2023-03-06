@@ -1,5 +1,6 @@
 package com.example.unsplash.features.unsplashphotos.presentation.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -19,8 +21,11 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.unsplash.MainApplication
 import com.example.unsplash.R
 import com.example.unsplash.databinding.FragmentUnsplashPhotosBinding
+import com.example.unsplash.features.MainActivity
+import com.example.unsplash.features.di.adapter.AdapterModule
 import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoPagingAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
 import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoLoadStateAdapter
@@ -29,19 +34,15 @@ import com.example.unsplash.features.unsplashphotos.utils.startAnimation
 import io.reactivex.Observer
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
-import java.util.concurrent.Flow
+import javax.inject.Inject
 
 class UnsplashPhotosFragment : Fragment() {
 
     private var _binding: FragmentUnsplashPhotosBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: UnsplashPhotoViewModel by viewModel()
+    @Inject
+    lateinit var viewModel: UnsplashPhotoViewModel
 
     private var recyclerView: RecyclerView? = null
 
@@ -68,8 +69,15 @@ class UnsplashPhotosFragment : Fragment() {
             .actionUnsplashPhotosFragmentToUnsplashPhotoAndUserDetailsFragment(unsplashPhotoUi)
         findNavController().navigate(action)
     }
-    private val unsplashPhotoPagingAdapter: UnsplashPhotoPagingAdapter by inject{
-        parametersOf(unsplashPhotoDetailListener, unsplashPhotoAndUserDetailsListener)
+
+    @Inject
+    lateinit var customAdapterFactory: AdapterModule
+
+    lateinit var unsplashPhotoPagingAdapter: UnsplashPhotoPagingAdapter
+
+    override fun onAttach(context: Context) {
+        (requireActivity().application as MainApplication).appComponent.inject(this)
+        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -84,6 +92,7 @@ class UnsplashPhotosFragment : Fragment() {
         disposable = CompositeDisposable()
 
         bindViews()
+        setUpPagingAdapter()
         customizeRecyclerView()
         observerLiveData()
         setLoadStateListener()
@@ -128,6 +137,11 @@ class UnsplashPhotosFragment : Fragment() {
         bindRecycler()
     }
 
+    private fun setUpPagingAdapter() {
+        unsplashPhotoPagingAdapter = customAdapterFactory
+            .createUnsplashPhotoPagingAdapter(unsplashPhotoDetailListener, unsplashPhotoAndUserDetailsListener)
+    }
+
     private fun bindFab() {
         val animation = AnimationUtils.loadAnimation(context, R.anim.circle_explosion_anim).apply {
             duration = 700
@@ -166,7 +180,6 @@ class UnsplashPhotosFragment : Fragment() {
     }
 
     private fun observerLiveData() {
-        // 1
         viewModel.unsplashPhotos.subscribe(object : Observer<PagingData<UnsplashPhotoUi>> {
             override fun onSubscribe(d: Disposable) {
                 Log.d("PetProject", "onSubscribe")
@@ -185,11 +198,6 @@ class UnsplashPhotosFragment : Fragment() {
                 Log.d("PetProject", "onComplete")
             }
         })
-
-        // 2
-//        disposable?.add(viewModel.unsplashPhotos.subscribe { list ->
-//            unsplashPhotoPagingAdapter.submitData(lifecycle, list)
-//        })
     }
 
     override fun onDestroyView() {

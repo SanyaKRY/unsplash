@@ -2,6 +2,7 @@ package com.example.unsplash.features.unsplashphotodetail.presenter.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.transition.TransitionInflater
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.view.ViewPropertyAnimator
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -19,18 +21,21 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.example.unsplash.MainApplication
 import com.example.unsplash.R
 import com.example.unsplash.databinding.FragmentUnsplashPhotoDetailBinding
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.UiToDetailUiMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import com.example.unsplash.features.unsplashphotodetail.presenter.vm.UnsplashPhotoDetailViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import com.example.unsplash.features.unsplashphotodetail.presenter.vm.UnsplashPhotoDetailViewModelFactory
+import javax.inject.Inject
 
 class UnsplashPhotoDetailFragment : Fragment() {
 
-    private val viewModel: UnsplashPhotoDetailViewModel by viewModel() {
-        parametersOf(UiToDetailUiMapper.map(args.unsplashPhoto))
+    @Inject
+    lateinit var factory: UnsplashPhotoDetailViewModelFactory.Factory
+    private val viewModel: UnsplashPhotoDetailViewModel by viewModels {
+        factory.create(UiToDetailUiMapper.map(args.unsplashPhoto))
     }
 
     private var _binding: FragmentUnsplashPhotoDetailBinding? = null
@@ -39,6 +44,11 @@ class UnsplashPhotoDetailFragment : Fragment() {
     private val args: UnsplashPhotoDetailFragmentArgs by navArgs()
 
     private lateinit var unsplashPhoto: UnsplashPhotoDetailUi
+
+    override fun onAttach(context: Context) {
+        (requireActivity().application as MainApplication).appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

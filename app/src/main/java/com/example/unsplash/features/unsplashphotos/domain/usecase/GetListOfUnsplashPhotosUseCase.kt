@@ -5,8 +5,9 @@ import androidx.paging.PagingData
 import com.example.unsplash.features.unsplashphotos.domain.UnsplashPhotoRepository
 import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDomain
 import io.reactivex.Observable
+import javax.inject.Inject
 
-class GetListOfUnsplashPhotosUseCase(private val repository: UnsplashPhotoRepository) {
+class GetListOfUnsplashPhotosUseCase @Inject constructor(private val repository: UnsplashPhotoRepository) {
 
     fun execute(): Observable<PagingData<UnsplashPhotoDomain>> {
         var listOfUnsplashPhotos = repository.getListOfUnsplashPhotos()

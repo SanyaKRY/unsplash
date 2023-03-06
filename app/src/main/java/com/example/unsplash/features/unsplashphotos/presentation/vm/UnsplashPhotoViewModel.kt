@@ -9,8 +9,9 @@ import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDo
 import com.example.unsplash.features.unsplashphotos.presentation.mapper.PagingDomainToUiMapper
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
 import io.reactivex.Observable
+import javax.inject.Inject
 
-class UnsplashPhotoViewModel(
+class UnsplashPhotoViewModel @Inject constructor(
         private val getListOfUnsplashPhotosUseCase: GetListOfUnsplashPhotosUseCase
 ) : ViewModel() {
 

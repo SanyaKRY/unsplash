@@ -6,8 +6,9 @@ import com.example.unsplash.features.unsplashphotodetail.data.repository.mapper.
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
+import javax.inject.Inject
 
-class UnsplashPhotosRepositoryImpl(
+class UnsplashPhotosRepositoryImpl @Inject constructor(
     private val unsplashPhotoDBDataSource: UnsplashPhotoDBDataSource
 ) : UnsplashPhotosRepository {
 

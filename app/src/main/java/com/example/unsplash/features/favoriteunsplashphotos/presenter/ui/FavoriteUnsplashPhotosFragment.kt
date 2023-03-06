@@ -1,6 +1,7 @@
 package com.example.unsplash.features.favoriteunsplashphotos.presenter.ui
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -10,23 +11,31 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.unsplash.MainApplication
 import com.example.unsplash.R
 import com.example.unsplash.databinding.FragmentFavoriteUnsplashPhotosBinding
 import com.example.unsplash.features.favoriteunsplashphotos.presenter.ui.recyclerview.UnsplashPhotosUiAdapter
 import com.example.unsplash.features.favoriteunsplashphotos.presenter.vm.UnsplashPhotoDatabaseViewModel
 import com.google.android.material.snackbar.Snackbar
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import javax.inject.Inject
 
 class FavoriteUnsplashPhotosFragment : Fragment() {
 
     private var _binding: FragmentFavoriteUnsplashPhotosBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: UnsplashPhotoDatabaseViewModel by viewModel()
+    @Inject
+    lateinit var viewModel: UnsplashPhotoDatabaseViewModel
 
     private lateinit var recyclerView: RecyclerView
-    private val unsplashPhotosUiAdapter: UnsplashPhotosUiAdapter by inject()
+
+    lateinit var unsplashPhotosUiAdapter: UnsplashPhotosUiAdapter
+        @Inject set
+
+    override fun onAttach(context: Context) {
+        (requireActivity().application as MainApplication).appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

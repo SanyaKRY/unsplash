@@ -1,5 +1,6 @@
 package com.example.unsplash.features.unsplashphotoanduserdetails.presenter.ui
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -19,6 +20,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.unsplash.MainApplication
 import com.example.unsplash.R
 import com.example.unsplash.databinding.FragmentUnsplashPhotoAndUserDetailsBinding
 import com.example.unsplash.features.unsplashphotoanduserdetails.presenter.mapper.UiToUnsplashPhotoAndUserUiMapper
@@ -31,6 +33,11 @@ class UnsplashPhotoAndUserDetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val args: UnsplashPhotoDetailFragmentArgs by navArgs()
+
+    override fun onAttach(context: Context) {
+        (requireActivity().application as MainApplication).appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
