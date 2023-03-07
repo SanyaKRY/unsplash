@@ -24,9 +24,7 @@ import com.example.unsplash.databinding.FragmentUnsplashPhotoAndUserDetailsBindi
 import com.example.unsplash.features.unsplashphotoanduserdetails.presenter.mapper.UiToUnsplashPhotoAndUserUiMapper
 import com.example.unsplash.features.unsplashphotoanduserdetails.presenter.model.UnsplashPhotoAndUserDetailsUi
 import com.example.unsplash.features.unsplashphotodetail.presenter.ui.UnsplashPhotoDetailFragmentArgs
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class UnsplashPhotoAndUserDetailsFragment : Fragment() {
 
     private var _binding: FragmentUnsplashPhotoAndUserDetailsBinding? = null

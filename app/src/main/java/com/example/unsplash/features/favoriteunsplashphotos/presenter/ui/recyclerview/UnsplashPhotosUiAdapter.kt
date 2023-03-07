@@ -6,9 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unsplash.databinding.UnsplashPhotoItemBinding
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
-import javax.inject.Inject
 
-class UnsplashPhotosUiAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolderDatabase>() {
+class UnsplashPhotosUiAdapter : RecyclerView.Adapter<ViewHolderDatabase>() {
 
     private var listOfUnsplashPhotos: List<UnsplashPhotoDetailUi> = mutableListOf()
 

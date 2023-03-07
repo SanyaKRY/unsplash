@@ -5,9 +5,8 @@ import androidx.paging.PagingData
 import com.example.unsplash.features.unsplashphotos.domain.UnsplashPhotoRepository
 import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDomain
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class GetListOfUnsplashPhotosUseCase @Inject constructor(private val repository: UnsplashPhotoRepository) {
+class GetListOfUnsplashPhotosUseCase(private val repository: UnsplashPhotoRepository) {
 
     fun execute(): Flow<PagingData<UnsplashPhotoDomain>> {
         var listOfUnsplashPhotos = repository.getListOfUnsplashPhotos()
