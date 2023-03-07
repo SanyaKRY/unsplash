@@ -1,6 +1,7 @@
 package com.example.unsplash.features.unsplashphotodetail.presenter.vm
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.*
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.DeleteUnsplashPhotoByIdPhoyoUseCase
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.InsertUnsplashPhotoUseCase
@@ -8,13 +9,20 @@ import com.example.unsplash.features.unsplashphotodetail.domain.usecase.IsSavedU
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.DetailUiToDetailDomainMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import kotlinx.coroutines.launch
+import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.UiToDetailUiMapper
+import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class UnsplashPhotoDetailViewModel(
-    private val unsplashPhoto: UnsplashPhotoDetailUi,
+@HiltViewModel
+class UnsplashPhotoDetailViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val insertUnsplashPhotoUseCase: InsertUnsplashPhotoUseCase,
     private val deleteUnsplashPhotoByIdPhoyoUseCase: DeleteUnsplashPhotoByIdPhoyoUseCase,
     private val isSavedUnsplashPhotoUseCase: IsSavedUnsplashPhotoUseCase
 ) : ViewModel() {
+
+    var unsplashPhoto: UnsplashPhotoDetailUi? = UiToDetailUiMapper.map(savedStateHandle.get<UnsplashPhotoUi>("unsplashPhoto"))
 
     private val isSavedUnsplashPhotoMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val isSavedUnsplashPhotoLiveData: LiveData<Boolean>
@@ -25,9 +33,8 @@ class UnsplashPhotoDetailViewModel(
         get() = isLoadingMutableLiveData
 
     init {
-        Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel ${this.toString()}")
-        Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel unsplashPhoto ${unsplashPhoto.unsplashPhotoId}")
-        isSavedUnsplashPhoto(unsplashPhoto)
+        Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel unsplashPhoto ${unsplashPhoto!!.unsplashPhotoId}")
+        isSavedUnsplashPhoto(unsplashPhoto!!)
     }
 
     fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailUi) {

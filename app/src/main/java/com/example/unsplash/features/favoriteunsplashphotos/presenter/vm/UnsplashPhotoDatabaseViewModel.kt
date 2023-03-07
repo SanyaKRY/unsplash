@@ -10,8 +10,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.example.unsplash.core.datatype.Result
 import com.example.unsplash.core.datatype.ResultType
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class UnsplashPhotoDatabaseViewModel(
+@HiltViewModel
+class UnsplashPhotoDatabaseViewModel @Inject constructor(
     private val getListOfUnsplashPhotosDatabaseUseCase: GetListOfUnsplashPhotosDatabaseUseCase,
     private val deleteAllUnsplashPhotoDatabaseUseCase: DeleteAllUnsplashPhotoDatabaseUseCase,
     private val deleteUnsplashPhotoDatabaseUseCase: DeleteUnsplashPhotoDatabaseUseCase,

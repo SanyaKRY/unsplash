@@ -9,8 +9,11 @@ import com.example.unsplash.features.unsplashphotodetail.data.repository.mapper.
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
 import com.example.unsplash.core.datatype.Result
 import com.example.unsplash.core.datatype.ResultType
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UnsplashPhotosRepositoryImpl(
+@Singleton
+class UnsplashPhotosRepositoryImpl @Inject constructor(
     private val unsplashPhotoDBDataSource: UnsplashPhotoDBDataSource
 ) : UnsplashPhotosRepository {
 

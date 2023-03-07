@@ -7,8 +7,9 @@ import com.example.unsplash.features.unsplashphotodetail.data.datasource.databas
 import com.example.unsplash.features.unsplashphotodetail.data.repository.mapper.DomainToDatabaseMapper
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
 import com.example.unsplash.core.datatype.Result
+import javax.inject.Inject
 
-class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) {
+class UnsplashPhotoDBDataSource @Inject constructor(private val unsplashPhotoDao: UnsplashPhotoDao) {
 
     suspend fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain) {
         return unsplashPhotoDao.insert(DomainToDatabaseMapper.map(unsplashPhoto))

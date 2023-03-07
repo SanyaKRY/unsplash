@@ -5,8 +5,13 @@ import com.example.unsplash.features.unsplashphotodetail.data.datasource.databas
 import com.example.unsplash.features.unsplashphotodetail.data.repository.mapper.DatabaseToDetailDomainMapper
 import com.example.unsplash.features.unsplashphotodetail.domain.UnsplashPhotoDetailRepository
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UnsplashPhotoDetailRepositoryImpl(private val unsplashPhotoDBDataSource: UnsplashPhotoDBDataSource) : UnsplashPhotoDetailRepository {
+@Singleton
+class UnsplashPhotoDetailRepositoryImpl @Inject constructor(
+    private val unsplashPhotoDBDataSource: UnsplashPhotoDBDataSource
+) : UnsplashPhotoDetailRepository {
 
     override suspend fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain) {
         return unsplashPhotoDBDataSource.insertUnsplashPhoto(unsplashPhoto)

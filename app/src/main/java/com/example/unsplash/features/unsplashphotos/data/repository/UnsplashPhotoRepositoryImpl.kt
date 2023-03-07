@@ -10,10 +10,11 @@ import com.example.unsplash.features.unsplashphotos.data.repository.mapper.Pagin
 import com.example.unsplash.features.unsplashphotos.domain.UnsplashPhotoRepository
 import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDomain
 import com.example.unsplash.features.unsplashphotos.data.paging.UncplashPhotoPagingSource
+import javax.inject.Inject
 
 const val MAX_RESULTS_PER_PAGE: Int = 10
 
-class UnsplashPhotoRepositoryImpl(
+class UnsplashPhotoRepositoryImpl @Inject constructor(
     private val unsplashPhotoNetworkDataSource: UnsplashPhotoNetworkDataSource
 ) : UnsplashPhotoRepository {
 

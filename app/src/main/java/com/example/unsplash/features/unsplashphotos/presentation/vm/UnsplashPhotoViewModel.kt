@@ -8,8 +8,11 @@ import com.example.unsplash.features.unsplashphotos.domain.usecase.GetListOfUnsp
 import com.example.unsplash.features.unsplashphotos.domain.model.UnsplashPhotoDomain
 import com.example.unsplash.features.unsplashphotos.presentation.mapper.PagingDomainToUiMapper
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class UnsplashPhotoViewModel(
+@HiltViewModel
+class UnsplashPhotoViewModel @Inject constructor(
         private val getListOfUnsplashPhotosUseCase: GetListOfUnsplashPhotosUseCase
 ) : ViewModel() {
 

@@ -7,6 +7,7 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,18 +19,21 @@ import com.example.unsplash.features.favoriteunsplashphotos.presenter.ui.recycle
 import com.example.unsplash.features.favoriteunsplashphotos.presenter.vm.UnsplashPhotoDatabaseViewModel
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import com.google.android.material.snackbar.Snackbar
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FavoriteUnsplashPhotosFragment : Fragment() {
 
     private var _binding: FragmentFavoriteUnsplashPhotosBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: UnsplashPhotoDatabaseViewModel by viewModel()
+    private val viewModel: UnsplashPhotoDatabaseViewModel by viewModels()
 
     private lateinit var recyclerView: RecyclerView
-    private val unsplashPhotosUiAdapter: UnsplashPhotosUiAdapter by inject()
+
+    lateinit var unsplashPhotosUiAdapter: UnsplashPhotosUiAdapter
+        @Inject set
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.ViewPropertyAnimator
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -24,14 +25,12 @@ import com.example.unsplash.databinding.FragmentUnsplashPhotoDetailBinding
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.UiToDetailUiMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import com.example.unsplash.features.unsplashphotodetail.presenter.vm.UnsplashPhotoDetailViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UnsplashPhotoDetailFragment : Fragment() {
 
-    private val viewModel: UnsplashPhotoDetailViewModel by viewModel() {
-        parametersOf(UiToDetailUiMapper.map(args.unsplashPhoto))
-    }
+    private val viewModel: UnsplashPhotoDetailViewModel by viewModels()
 
     private var _binding: FragmentUnsplashPhotoDetailBinding? = null
     private val binding get() = _binding!!

@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -22,19 +23,20 @@ import com.example.unsplash.R
 import com.example.unsplash.databinding.FragmentUnsplashPhotosBinding
 import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoPagingAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashPhotoUi
+import com.example.unsplash.features.unsplashphotos.presentation.ui.di.AdapterModule
 import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoLoadStateAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
 import com.example.unsplash.features.unsplashphotos.utils.startAnimation
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class UnsplashPhotosFragment : Fragment() {
 
     private var _binding: FragmentUnsplashPhotosBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: UnsplashPhotoViewModel by viewModel()
+    private val viewModel: UnsplashPhotoViewModel by viewModels()
 
     private var recyclerView: RecyclerView? = null
 
@@ -59,9 +61,11 @@ class UnsplashPhotosFragment : Fragment() {
             .actionUnsplashPhotosFragmentToUnsplashPhotoAndUserDetailsFragment(unsplashPhotoUi)
         findNavController().navigate(action)
     }
-    private val unsplashPhotoPagingAdapter: UnsplashPhotoPagingAdapter by inject{
-        parametersOf(unsplashPhotoDetailListener, unsplashPhotoAndUserDetailsListener)
-    }
+
+    @Inject
+    lateinit var customAdapterFactory: AdapterModule
+
+    lateinit var unsplashPhotoPagingAdapter: UnsplashPhotoPagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,6 +74,7 @@ class UnsplashPhotosFragment : Fragment() {
         _binding = FragmentUnsplashPhotosBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        setUpPagingAdapter()
         bindViews()
         customizeRecyclerView()
         observerLiveData()
@@ -108,6 +113,11 @@ class UnsplashPhotosFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setUpPagingAdapter() {
+        unsplashPhotoPagingAdapter =
+            customAdapterFactory.createUnsplashPhotoPagingAdapter(unsplashPhotoDetailListener, unsplashPhotoAndUserDetailsListener)
     }
 
     private fun bindViews() {
