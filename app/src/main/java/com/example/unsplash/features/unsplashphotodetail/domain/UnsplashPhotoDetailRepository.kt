@@ -5,6 +5,6 @@ import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPh
 interface UnsplashPhotoDetailRepository {
 
     suspend fun insertUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain)
-    suspend fun deleteUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain)
+    suspend fun deleteUnsplashtByIdPhoto(unsplashPhoto: UnsplashPhotoDetailDomain)
     suspend fun searchUnsplashPhoto(unsplashPhoto: UnsplashPhotoDetailDomain): UnsplashPhotoDetailDomain?
 }

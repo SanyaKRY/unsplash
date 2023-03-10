@@ -1,12 +1,15 @@
 package com.example.unsplash.features.unsplashphotodetail.data.datasource.database
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+import android.util.Log
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.dao.UnsplashPhotoDao
 import com.example.unsplash.features.unsplashphotodetail.data.datasource.database.model.UnsplashPhotoDatabase
 import com.example.unsplash.features.unsplashphotodetail.data.repository.mapper.DomainToDatabaseMapper
 import com.example.unsplash.features.unsplashphotodetail.domain.model.UnsplashPhotoDetailDomain
+import kotlinx.coroutines.flow.Flow
 import com.example.unsplash.core.datatype.Result
+import kotlinx.coroutines.flow.flow
+import java.lang.Error
+import java.lang.Exception
 
 class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) {
 
@@ -18,6 +21,10 @@ class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) 
         return unsplashPhotoDao.delete(DomainToDatabaseMapper.map(unsplashPhoto))
     }
 
+    suspend fun deleteUnsplashPhotoByUnsplashPhotoId(unsplashPhoto: UnsplashPhotoDetailDomain) {
+        return unsplashPhotoDao.deleteByUnsplashPhotoId(DomainToDatabaseMapper.map(unsplashPhoto).unsplashPhotoId)
+    }
+
     suspend fun deleteAllUnsplashPhoto() {
         return unsplashPhotoDao.deleteAll()
     }
@@ -26,57 +33,52 @@ class UnsplashPhotoDBDataSource(private val unsplashPhotoDao: UnsplashPhotoDao) 
         return unsplashPhotoDao.search(DomainToDatabaseMapper.map(unsplashPhoto).unsplashPhotoId)
     }
 
-    fun getAllUnsplashPhotos(): LiveData<Result<List<UnsplashPhotoDatabase>>> {
-        var result = MediatorLiveData<Result<List<UnsplashPhotoDatabase>>>()
-        result.value = Result.loading()
-        try {
-            var source: LiveData<List<UnsplashPhotoDatabase>> = unsplashPhotoDao.getAllUnsplashPhotos()
-            result.addSource(source) { list: List<UnsplashPhotoDatabase> ->
-                if (list.isNotEmpty()) {
-                    result.value = Result.success(list)
-                } else {
-                    result.value = Result.error(Exception())
-                }
+    fun getAllUnsplashPhotos(): Flow<Result<List<UnsplashPhotoDatabase>>> {
+        return flow {
+            try {
+                unsplashPhotoDao.getAllUnsplashPhotos()
+                    .collect { list: List<UnsplashPhotoDatabase> ->
+                        emit(Result.success(list))
+                    }
+            } catch (ex: Exception) {
+                Result.error<Error>(Exception(ex))
             }
-        } catch (ex: Exception) {
-            result.value = Result.error(Exception(ex))
         }
-        return result
     }
 
-    fun getAllUnsplashPhotosSortById(): LiveData<Result<List<UnsplashPhotoDatabase>>> {
-        var result = MediatorLiveData<Result<List<UnsplashPhotoDatabase>>>()
-        result.value = Result.loading()
-        try {
-            var source: LiveData<List<UnsplashPhotoDatabase>> = unsplashPhotoDao.getAllUnsplashPhotosSortById()
-            result.addSource(source) { list: List<UnsplashPhotoDatabase> ->
-                if (list.isNotEmpty()) {
-                    result.value = Result.success(list)
-                } else {
-                    result.value = Result.error(Exception())
-                }
+    fun getAllUnsplashPhotosSortById(): Flow<Result<List<UnsplashPhotoDatabase>>> {
+        return flow {
+            try {
+                unsplashPhotoDao.getAllUnsplashPhotosSortById()
+                    .collect { list: List<UnsplashPhotoDatabase> ->
+                        if (list.isNotEmpty()) {
+                            emit(Result.success(list))
+                        } else {
+                            emit(Result.error(Exception("empty")))
+                        }
+                    }
+            } catch (ex: Exception) {
+                Result.error<Error>(Exception(ex))
             }
-        } catch (ex: Exception) {
-            result.value = Result.error(Exception(ex))
         }
-        return result
     }
 
-    fun searchUnsplashPhotoByQuery(searchQuery: String): LiveData<Result<List<UnsplashPhotoDatabase>>> {
-        var result = MediatorLiveData<Result<List<UnsplashPhotoDatabase>>>()
-        result.value = Result.loading()
-        try {
-            var source: LiveData<List<UnsplashPhotoDatabase>> = unsplashPhotoDao.searchByQuery(searchQuery)
-            result.addSource(source) { list: List<UnsplashPhotoDatabase> ->
-                if (list.isNotEmpty()) {
-                    result.value = Result.success(list)
-                } else {
-                    result.value = Result.error(Exception())
-                }
+    fun searchUnsplashPhotoByQuery(searchQuery: String): Flow<Result<List<UnsplashPhotoDatabase>>> {
+        Log.d("PetProjectSearch", "searchUnsplashPhotoByQuery $searchQuery")
+        return flow {
+            try {
+                unsplashPhotoDao.searchByQuery(searchQuery)
+                    .collect { list: List<UnsplashPhotoDatabase> ->
+                        if (list.isNotEmpty()) {
+                            emit(Result.success(list))
+                            Log.d("PetProjectSearch", "list.size: ${list.size}")
+                        } else {
+                            emit(Result.error(Exception("empty")))
+                        }
+                    }
+            } catch (ex: Exception) {
+                Result.error<Error>(Exception(ex))
             }
-        } catch (ex: Exception) {
-            result.value = Result.error(Exception(ex))
         }
-        return result
     }
 }

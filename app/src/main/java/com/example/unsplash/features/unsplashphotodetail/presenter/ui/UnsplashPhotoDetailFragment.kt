@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,8 @@ import android.view.ViewGroup
 import android.view.ViewPropertyAnimator
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.lifecycle.Observer
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -24,8 +26,11 @@ import com.example.unsplash.databinding.FragmentUnsplashPhotoDetailBinding
 import com.example.unsplash.features.unsplashphotodetail.presenter.mapper.UiToDetailUiMapper
 import com.example.unsplash.features.unsplashphotodetail.presenter.model.UnsplashPhotoDetailUi
 import com.example.unsplash.features.unsplashphotodetail.presenter.vm.UnsplashPhotoDetailViewModel
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import com.example.unsplash.core.datatype.Result
+import com.example.unsplash.core.datatype.ResultType
 
 class UnsplashPhotoDetailFragment : Fragment() {
 
@@ -47,7 +52,7 @@ class UnsplashPhotoDetailFragment : Fragment() {
         _binding = FragmentUnsplashPhotoDetailBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        observerLiveData()
+        observerFlow()
         bindViews()
         setTransition()
         setInserDeleteButtonImageView()
@@ -165,17 +170,21 @@ class UnsplashPhotoDetailFragment : Fragment() {
             .into(imageView)
     }
 
-    private fun observerLiveData() {
-        viewModel.isSavedUnsplashPhotoLiveData.observe(
-            viewLifecycleOwner,
-            Observer(::isSavedUnsplashPhoto)
-        )
-    }
-
-    private fun isSavedUnsplashPhoto(isSaved: Boolean) {
-        unsplashPhoto.isSaved = isSaved
-        // animation
-        populateFavoriteIconView(isSaved)
+    private fun observerFlow() {
+        lifecycleScope.launch {
+            viewModel.isSavedUnsplashPhotoFlow.collect { result: Result<Boolean> ->
+                when (result.resultType) {
+                    ResultType.LOADING -> {
+                        binding.insertDeleteImageView.isVisible = false
+                    }
+                    ResultType.SUCCESS -> {
+                        binding.insertDeleteImageView.isVisible = true
+                        unsplashPhoto.isSaved = result.data
+                        populateFavoriteIconView(result.data!!)
+                    }
+                }
+            }
+        }
     }
 
     private fun bindViews() {

@@ -12,10 +12,10 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -26,15 +26,12 @@ import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashP
 import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoLoadStateAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
 import com.example.unsplash.features.unsplashphotos.utils.startAnimation
-import io.reactivex.Observer
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
-import java.util.concurrent.Flow
 
 class UnsplashPhotosFragment : Fragment() {
 
@@ -45,19 +42,17 @@ class UnsplashPhotosFragment : Fragment() {
 
     private var recyclerView: RecyclerView? = null
 
-    private var disposable: CompositeDisposable? = null
-
     private val unsplashPhotoDetailListener: (
         unsplashPhotoUi: UnsplashPhotoUi, imageView: AppCompatImageView, textView: TextView
     ) -> Unit = {
             unsplashPhotoUi, imageView, textView ->
-                val extras = FragmentNavigatorExtras(
-                    imageView to unsplashPhotoUi.urlsRegular,
-                    textView to unsplashPhotoUi.unsplashPhotoId
-                )
-                val action = UnsplashPhotosFragmentDirections
-                    .actionUnsplashPhotosFragmentToUnsplashPhotoDetailFragment(unsplashPhotoUi)
-                findNavController().navigate(action, extras)
+        val extras = FragmentNavigatorExtras(
+            imageView to unsplashPhotoUi.urlsRegular,
+            textView to unsplashPhotoUi.unsplashPhotoId
+        )
+        val action = UnsplashPhotosFragmentDirections
+            .actionUnsplashPhotosFragmentToUnsplashPhotoDetailFragment(unsplashPhotoUi)
+        findNavController().navigate(action, extras)
     }
 
     private val unsplashPhotoAndUserDetailsListener: (
@@ -79,13 +74,9 @@ class UnsplashPhotosFragment : Fragment() {
         _binding = FragmentUnsplashPhotosBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        // CompositeDisposable для хранения всех ваших подписок, и отписывание от них всех в onDestroy()
-        // или в onDestroyView()c помощью метода dispose()
-        disposable = CompositeDisposable()
-
         bindViews()
         customizeRecyclerView()
-        observerLiveData()
+        observerFlow()
         setLoadStateListener()
 
         return view
@@ -137,7 +128,7 @@ class UnsplashPhotosFragment : Fragment() {
             binding.floatingActionButton.isVisible = false
             binding.circle.isVisible = true
             binding.circle.startAnimation(animation) {
-                val action = UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToSomeFragment()
+                val action = UnsplashPhotosFragmentDirections.actionUnsplashPhotosFragmentToFavoriteUnsplashPhotosFragment()
                 findNavController().navigate(action)
                 context?.let {
                     binding.root.setBackgroundColor(ContextCompat.getColor(it, R.color.purple_200))
@@ -165,36 +156,16 @@ class UnsplashPhotosFragment : Fragment() {
         }
     }
 
-    private fun observerLiveData() {
-        // 1
-        viewModel.unsplashPhotos.subscribe(object : Observer<PagingData<UnsplashPhotoUi>> {
-            override fun onSubscribe(d: Disposable) {
-                Log.d("PetProject", "onSubscribe")
+    private fun observerFlow() {
+        lifecycleScope.launch {
+            viewModel.unsplashPhotos.collect {
+                unsplashPhotoPagingAdapter.submitData(it)
             }
-
-            override fun onNext(t: PagingData<UnsplashPhotoUi>) {
-                Log.d("PetProject", "onNext")
-                unsplashPhotoPagingAdapter.submitData(lifecycle, t)
-            }
-
-            override fun onError(e: Throwable) {
-                Log.d("PetProject", "onError")
-            }
-
-            override fun onComplete() {
-                Log.d("PetProject", "onComplete")
-            }
-        })
-
-        // 2
-//        disposable?.add(viewModel.unsplashPhotos.subscribe { list ->
-//            unsplashPhotoPagingAdapter.submitData(lifecycle, list)
-//        })
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        disposable?.dispose()
         _binding = null
     }
 }
