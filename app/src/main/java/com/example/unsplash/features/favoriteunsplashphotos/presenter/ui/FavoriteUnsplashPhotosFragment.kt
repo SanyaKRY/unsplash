@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.animation.AnimationUtils
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -30,7 +31,7 @@ class FavoriteUnsplashPhotosFragment : Fragment() {
 
     private val viewModel: UnsplashPhotoDatabaseViewModel by viewModel()
 
-    private lateinit var recyclerView: RecyclerView
+    private var recyclerView: RecyclerView? = null
     private val unsplashPhotosUiAdapter: UnsplashPhotosUiAdapter by inject()
 
     override fun onCreateView(
@@ -45,6 +46,7 @@ class FavoriteUnsplashPhotosFragment : Fragment() {
 
         bindViews()
         setRecyclerView()
+
         observerFlow()
         setItemTouchHelper()
         setHasOptionsMenu(true)
@@ -128,9 +130,12 @@ class FavoriteUnsplashPhotosFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        recyclerView.apply {
+        recyclerView?.apply {
             layoutManager = LinearLayoutManager(context)
+
             adapter = unsplashPhotosUiAdapter
+
+
         }
     }
 

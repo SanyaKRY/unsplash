@@ -18,3 +18,4 @@ https://stackoverflow.com/questions/74235511/android-paging3-is-not-calling-page
 https://developer.android.com/reference/kotlin/androidx/paging/PagingDataAdapter
 https://chathurangashan.com/using-paging-3-library-to-consume-large-data-set-over-the-network/
 https://github.com/the-android-factory/Simple-Morty/blob/main/app/src/main/java/com/dmp/simplemorty/characters/search/CharacterSearchViewModel.kt
+https://www.geeksforgeeks.org/create-floating-animation-for-recyclerview-items-in-android/
