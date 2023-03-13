@@ -26,8 +26,6 @@ import com.example.unsplash.features.unsplashphotos.presentation.model.UnsplashP
 import com.example.unsplash.features.unsplashphotos.presentation.ui.paging.UnsplashPhotoLoadStateAdapter
 import com.example.unsplash.features.unsplashphotos.presentation.vm.UnsplashPhotoViewModel
 import com.example.unsplash.features.unsplashphotos.utils.startAnimation
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -149,8 +147,12 @@ class UnsplashPhotosFragment : Fragment() {
                 startPostponedEnterTransition()
                 true
             }
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-//            layoutManager = LinearLayoutManager(context)
+//            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = LinearLayoutManager(context)
+
+            layoutAnimation =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down)
+
             adapter = unsplashPhotoPagingAdapter
             setHasFixedSize(true)
         }
