@@ -37,7 +37,6 @@ class UnsplashPhotoDatabaseViewModel(
         get() = getUnsplashPhotosSortByIdDatabaseMutableFlow
 
     init {
-        Log.d("PetProject", "init class UnsplashPhotoDatabaseViewModel")
         getUnsplashPhotosDatabase()
         getUnsplashPhotosSortByIdDatabase()
     }

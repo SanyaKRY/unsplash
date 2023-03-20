@@ -177,6 +177,9 @@ class UnsplashPhotoDetailFragment : Fragment() {
                     ResultType.LOADING -> {
                         binding.insertDeleteImageView.isVisible = false
                     }
+                    ResultType.ERROR -> {
+                        // TODO
+                    }
                     ResultType.SUCCESS -> {
                         binding.insertDeleteImageView.isVisible = true
                         unsplashPhoto.isSaved = result.data

@@ -104,6 +104,9 @@ class FavoriteUnsplashPhotosFragment : Fragment() {
                     ResultType.LOADING -> {
                         // TODO
                     }
+                    ResultType.ERROR -> {
+                        // TODO
+                    }
                     ResultType.SUCCESS -> {
                         var list: List<UnsplashPhotoDetailUi> = result.data!!
                         unsplashPhotosUiAdapter.updateAdapter(list)
@@ -144,6 +147,9 @@ class FavoriteUnsplashPhotosFragment : Fragment() {
             viewModel.getUnsplashPhotosDatabaseUnsplashPhotoFlow.collect { result: Result<List<UnsplashPhotoDetailUi>> ->
                 when (result.resultType) {
                     ResultType.LOADING -> {
+                        // TODO
+                    }
+                    ResultType.ERROR -> {
                         // TODO
                     }
                     ResultType.SUCCESS -> {

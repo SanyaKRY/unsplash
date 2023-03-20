@@ -1,6 +1,5 @@
 package com.example.unsplash.features.unsplashphotodetail.presenter.vm
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unsplash.features.unsplashphotodetail.domain.usecase.InsertUnsplashPhotoUseCase
@@ -25,8 +24,6 @@ class UnsplashPhotoDetailViewModel(
         get() = isSavedUnsplashPhotoMutableFlow
 
     init {
-        Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel ${this.toString()}")
-        Log.d("UnsplashPhotoLog", "init UnsplashPhotoDetailViewModel unsplashPhoto ${unsplashPhoto.unsplashPhotoId}")
         isSavedUnsplashPhoto(unsplashPhoto)
     }
 

@@ -1,6 +1,5 @@
 package com.example.unsplash.features.unsplashphotos.data.repository
 
-import android.util.Log
 import androidx.paging.*
 import com.example.unsplash.features.unsplashphotos.data.datasource.api.UnsplashPhotoNetworkDataSource
 import com.example.unsplash.features.unsplashphotos.data.datasource.api.model.UnsplashPhotoApi
@@ -18,9 +17,6 @@ class UnsplashPhotoRepositoryImpl(
 ) : UnsplashPhotoRepository {
 
     override fun getListOfUnsplashPhotos(): Flow<PagingData<UnsplashPhotoDomain>> {
-
-        Log.d("PetProject", "call getListOfUnsplashPhotos(), class UnsplashPhotoRepositoryImpl")
-
         var pager =  Pager(
             config = PagingConfig(
                 pageSize = MAX_RESULTS_PER_PAGE
