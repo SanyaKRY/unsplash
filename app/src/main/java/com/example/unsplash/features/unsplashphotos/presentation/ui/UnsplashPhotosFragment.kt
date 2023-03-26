@@ -147,11 +147,11 @@ class UnsplashPhotosFragment : Fragment() {
                 startPostponedEnterTransition()
                 true
             }
-//            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+//            layoutManager = LinearLayoutManager(context)
 
-            layoutAnimation =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down)
+//            layoutAnimation =
+//                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down)
 
             adapter = unsplashPhotoPagingAdapter
             setHasFixedSize(true)
